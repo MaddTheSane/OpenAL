@@ -207,7 +207,7 @@ void	OALCaptureDevice::InitializeAU(const char* 	inDeviceName)
 
 	}
 	catch (OSStatus	result) {
-		if (mInputUnit)	::AudioFileComponentCloseFile(mInputUnit);
+		if (mInputUnit)	AudioFileComponentCloseFile(mInputUnit);
 		throw result;
 	}
 	catch (...) {
