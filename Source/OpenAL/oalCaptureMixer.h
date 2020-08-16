@@ -77,7 +77,7 @@ private:
     UInt32                      mRequestedRingFrames;
     SInt64                      mStoreSampleTime;
     SInt64                      mFetchSampleTime;
-    volatile int32_t            mCaptureOn;
+    std::atomic<int32_t>        mCaptureOn;
     
     AudioConverterRef           mAudioConverter;
     CABufferList*               mConvertedDataABL;

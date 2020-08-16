@@ -156,7 +156,7 @@ class OALContext
 	void			SetListenerGain(Float32 inGain);
 	void			SetListenerOrientation( Float32  forwardX,   Float32  forwardY, Float32  forwardZ,
 											Float32  upX,        Float32  upY, 		Float32  upZ);
-	void			SetReverbPreset (FSRef* inRef);
+	void			SetReverbPreset (CFURLRef inRef);
 
 	// ASA Support: Reverb, Occlusion
 	void			SetReverbState(UInt32 inReverbState);
@@ -188,8 +188,8 @@ class OALContext
 	bool				CallingInRenderThread () const { return (pthread_self() == mRenderThreadID); }
 	
 	volatile int32_t	IsInUse()			{ return mInUseFlag; }
-	void				SetInUseFlag()		{ OSAtomicIncrement32Barrier(&mInUseFlag); }
-	void				ClearInUseFlag()	{ OSAtomicDecrement32Barrier(&mInUseFlag); }
+	void				SetInUseFlag()		{ std::atomic_fetch_add(&mInUseFlag, 1); }
+	void				ClearInUseFlag()	{ std::atomic_fetch_add(&mInUseFlag, -1); }
 	
 	// context activity methods
 	void			ProcessContext();
@@ -240,7 +240,7 @@ class OALContext
 		UInt32				mRenderQuality;                 // Hi or Lo for now
         UInt32				mSpatialSetting;
         UInt32				mBusCount;
-		volatile int32_t	mInUseFlag;		
+		std::atomic<int32_t> mInUseFlag;		
         Float64				mMixerOutputRate;
         Float32				mDefaultReferenceDistance;
         Float32				mDefaultMaxDistance;

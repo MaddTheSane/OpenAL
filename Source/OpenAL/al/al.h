@@ -33,7 +33,7 @@ extern "C" {
 #endif
 
 #ifndef OPENAL_DEPRECATED
-#define OPENAL_DEPRECATED API_DEPRECATED("OpenAL is deprecated in favor of AVAudioEngine", macos(10.4, 10.15), ios(2.0, 13.0))
+#define OPENAL_DEPRECATED API_DEPRECATED("OpenAL is deprecated in favor of AVAudioEngine", macos(10.4, API_TO_BE_DEPRECATED), ios(2.0, API_TO_BE_DEPRECATED))
 #endif // OPENAL_DEPRECATED
 
 /*

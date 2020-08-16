@@ -237,14 +237,14 @@ UInt32	OALCaptureMixer::AvailableFrames()
 void	OALCaptureMixer::SetCaptureFlag()
 {
     int32_t one = 1;    int32_t zero = 0;
-    OSAtomicCompareAndSwap32Barrier(zero, one, &mCaptureOn);
+    std::atomic_compare_exchange_strong(&mCaptureOn, &zero, one);
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void	OALCaptureMixer::ClearCaptureFlag()
 {
     int32_t one = 1;    int32_t zero = 0;
-    OSAtomicCompareAndSwap32Barrier(one, zero, &mCaptureOn);
+    std::atomic_compare_exchange_strong(&mCaptureOn, &one, zero);
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

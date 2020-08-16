@@ -35,6 +35,7 @@
 #include <libkern/OSAtomic.h>
 #include <vector>
 #include <queue>
+#include <atomic>
 #include <dispatch/dispatch.h>
 
 #include "CAStreamBasicDescription.h"
@@ -391,7 +392,7 @@ private:
 #pragma mark _____OALRenderLocker_____
 
 class OALRenderLocker {
-	int mAcquireFlag, mTryFlag;
+	std::atomic<int> mAcquireFlag, mTryFlag;
 	
 	OALRenderLocker& operator= (const OALRenderLocker& as) { return *this; }
 	OALRenderLocker (const OALRenderLocker& as) {}
@@ -410,7 +411,7 @@ public:
 		{
 			if (!mInRenderThread)
 			{
-				OSAtomicIncrement32Barrier(&mEditor.mAcquireFlag); 
+				std::atomic_fetch_add(&mEditor.mAcquireFlag, 1);
 				while (mEditor.mTryFlag) { usleep(500); }
 			}
 		}
@@ -418,7 +419,7 @@ public:
 		{
 			if (!mInRenderThread)
 			{
-				OSAtomicDecrement32Barrier (&mEditor.mAcquireFlag);
+				std::atomic_fetch_add (&mEditor.mAcquireFlag, -1);
 			}
 		}
 	};
@@ -429,11 +430,11 @@ public:
 		RenderTryer (OALRenderLocker & trier)
 			: mTrier (trier)
 		{
-			OSAtomicIncrement32Barrier(&mTrier.mTryFlag);
+			std::atomic_fetch_add(&mTrier.mTryFlag, 1);
 		}
 		~RenderTryer ()
 		{
-			OSAtomicDecrement32Barrier (&mTrier.mTryFlag);
+			std::atomic_fetch_add (&mTrier.mTryFlag, -1);
 		}
 		bool Acquired () const { return !mTrier.mAcquireFlag; }
 	};
@@ -468,7 +469,7 @@ class OALSource
 		ALuint						mCurrentBufferIndex;		// index of the current buffer being played
 		bool						mQueueIsProcessed;			// state of the entire buffer queue
 		
-		volatile int32_t			mInUseFlag;					// flag to indicate a source is currently being used by one or more threads
+		std::atomic<int32_t>		mInUseFlag;					// flag to indicate a source is currently being used by one or more threads
 		CAGuard						mSourceLock;
 		AURenderCallbackStruct 		mPlayCallback;
 		int							mCurrentPlayBus;			// the mixer bus currently used by this source
@@ -683,8 +684,8 @@ class OALSource
 	Float32	GetQueueOffsetSecondsFloat();
 
 	// thread safety
-	void	SetInUseFlag()		{ OSAtomicIncrement32Barrier(&mInUseFlag); }
-	void	ClearInUseFlag()	{ OSAtomicDecrement32Barrier(&mInUseFlag); }
+	void	SetInUseFlag()		{ std::atomic_fetch_add(&mInUseFlag, 1); }
+	void	ClearInUseFlag()	{ std::atomic_fetch_add(&mInUseFlag, -1); }
 
     // buffer queue
     UInt32	GetQLengthPriv();
@@ -735,13 +736,13 @@ class OALSource
 	void			SetRogerBeepGain(Float32 inGain);
 	void			SetRogerBeepSensitivity(SInt32 inSensitivity);
 	void			SetRogerBeepType(SInt32 inType);
-	void			SetRogerBeepPreset(FSRef* inRef);
+	void			SetRogerBeepPreset(CFURLRef inRef);
 	
 	void			SetDistortionEnable(Boolean inEnable);
 	void			SetDistortionOn(Boolean inOn);
 	void			SetDistortionMix(Float32 inMix);
 	void			SetDistortionType(SInt32 inType);
-	void			SetDistortionPreset(FSRef* inRef);
+	void			SetDistortionPreset(CFURLRef inRef);
 
 	Float32			GetReverbSendLevel() {return mASAReverbSendLevel;}
 	Float32			GetOcclusion() {return mASAOcclusion;}

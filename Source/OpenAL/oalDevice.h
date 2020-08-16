@@ -81,8 +81,8 @@ class OALDevice
 
 	// thread safety
 	volatile int32_t	IsInUse()			{ return mInUseFlag; }
-	void				SetInUseFlag()		{ OSAtomicIncrement32Barrier(&mInUseFlag); }
-	void				ClearInUseFlag()	{ OSAtomicDecrement32Barrier(&mInUseFlag); }
+	void				SetInUseFlag()		{ std::atomic_fetch_add(&mInUseFlag, 1); }
+	void				ClearInUseFlag()	{ std::atomic_fetch_add(&mInUseFlag, -1); }
 
 	// set info
 	void				SetRenderChannelSetting (UInt32 inRenderChannelSetting);
@@ -138,7 +138,7 @@ class OALDevice
         UInt32					mRenderChannelCount;
         UInt32					mRenderChannelSetting;			// currently either stereo or multichannel
 		UInt32					mFramesPerSlice;
-		volatile int32_t		mInUseFlag;						// flag to indicate if the device is currently being edited by one or more threads
+		std::atomic<int32_t>	mInUseFlag;						// flag to indicate if the device is currently being edited by one or more threads
 #if AUHAL_LOG_OUTPUT
         AudioLogger			mLogger;
 #endif

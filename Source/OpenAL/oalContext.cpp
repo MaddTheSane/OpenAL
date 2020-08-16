@@ -282,18 +282,18 @@ void		OALContext::InitializeMixer(UInt32	inStereoBusCount)
 			mSettableMixerAttenuationCurves = true;
 		}
 
-		ComponentDescription	mixerCD;
+		AudioComponentDescription	mixerCD;
 		mixerCD.componentFlags = 0;        
 		mixerCD.componentFlagsMask = 0;     
 		mixerCD.componentType = kAudioUnitType_Mixer;          
-		mixerCD.componentSubType = kAudioUnitSubType_3DMixer;       
+		mixerCD.componentSubType = kAudioUnitSubType_SpatialMixer;
 		mixerCD.componentManufacturer = kAudioUnitManufacturer_Apple;  
 		
 		// CREATE NEW NODE FOR THE GRAPH
-		result = AUGraphNewNode (mOwningDevice->GetGraph(), &mixerCD, 0, NULL, &mMixerNode);
+		result = AUGraphAddNode (mOwningDevice->GetGraph(), &mixerCD, &mMixerNode);
 			THROW_RESULT
 
-		result = AUGraphGetNodeInfo (mOwningDevice->GetGraph(), mMixerNode, 0, 0, 0, &mMixerUnit);
+		result = AUGraphNodeInfo (mOwningDevice->GetGraph(), mMixerNode, 0, &mMixerUnit);
 			THROW_RESULT   
 
 		// Get Default Distance Setting when the good 3DMixer is around
@@ -301,7 +301,7 @@ void		OALContext::InitializeMixer(UInt32	inStereoBusCount)
 		{
 			MixerDistanceParams		distanceParams;
 			propSize = sizeof(distanceParams);
-			result = AudioUnitGetProperty(mMixerUnit, kAudioUnitProperty_3DMixerDistanceParams, kAudioUnitScope_Input, 1, &distanceParams, &propSize);
+			result = AudioUnitGetProperty(mMixerUnit, kAudioUnitProperty_SpatialMixerDistanceParams, kAudioUnitScope_Input, 1, &distanceParams, &propSize);
 			if (result == noErr)
 			{
 				mDefaultReferenceDistance = distanceParams.mReferenceDistance;
@@ -389,12 +389,12 @@ void		OALContext::InitializeMixer(UInt32	inStereoBusCount)
 			// set kAudioUnitProperty_3DMixerRenderingFlags (distance attenuation) for mono busses
 			if (theOutFormat.mChannelsPerFrame == 1)
 			{
-				UInt32 		render_flags_3d = k3DMixerRenderingFlags_DistanceAttenuation;
+				UInt32 		render_flags_3d = kSpatialMixerRenderingFlags_DistanceAttenuation;
 				if (mRenderQuality == ALC_MAC_OSX_SPATIAL_RENDERING_QUALITY_HIGH)
-					render_flags_3d += k3DMixerRenderingFlags_InterAuralDelay; // off by default, on if the user sets High Quality rendering
+					render_flags_3d |= kSpatialMixerRenderingFlags_InterAuralDelay; // off by default, on if the user sets High Quality rendering
 
 				// Render Flags
-				/*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_3DMixerRenderingFlags, kAudioUnitScope_Input, i, &render_flags_3d, sizeof(render_flags_3d));
+				/*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_SpatialMixerRenderingFlags, kAudioUnitScope_Input, i, &render_flags_3d, sizeof(render_flags_3d));
 			}
 		}
 
@@ -1011,7 +1011,7 @@ void OALContext::InitRenderQualityOnBusses()
 											i, &mSpatialSetting, sizeof(mSpatialSetting));
 
 			// Render Flags                
-            /*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_3DMixerRenderingFlags, kAudioUnitScope_Input,
+            /*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_SpatialMixerRenderingFlags, kAudioUnitScope_Input,
 											i, &render_flags_3d, sizeof(render_flags_3d));						
 		}
 	}
@@ -1160,6 +1160,7 @@ void    OALContext::SetDistanceAttenuation(UInt32    inBusIndex, Float64 inRefDi
     Float64     maxattenuationDB = 20 * log10(inRefDist / (inRefDist + (inRolloff * (inMaxDist - inRefDist))));
     Float64     maxattenuation = pow(10, (maxattenuationDB/20));                    
     Float64     distAttenuation = (log(1/maxattenuation))/(log(inMaxDist)) - 1.0;
+	UInt32		ourAtten = distAttenuation;
 
 	#if 0
 		DebugMessageN1("SetDistanceAttenuation:Reference Distance =  %f", inRefDist);
@@ -1171,7 +1172,7 @@ void    OALContext::SetDistanceAttenuation(UInt32    inBusIndex, Float64 inRefDi
 
 	#endif
     
-    AudioUnitSetProperty(mMixerUnit, kAudioUnitProperty_3DMixerDistanceAtten, kAudioUnitScope_Input, inBusIndex, &distAttenuation, sizeof(distAttenuation));
+    AudioUnitSetProperty(mMixerUnit, kAudioUnitProperty_SpatialMixerAttenuationCurve, kAudioUnitScope_Input, inBusIndex, &ourAtten, sizeof(ourAtten));
     return;
 }
 
@@ -1226,12 +1227,12 @@ UInt32		OALContext::GetAvailableMonoBus (ALuint inSourceToken)
 				AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_SpatializationAlgorithm, kAudioUnitScope_Input, 
 										i, &mSpatialSetting, sizeof(mSpatialSetting));
 
-				UInt32 		render_flags_3d = k3DMixerRenderingFlags_DistanceAttenuation;
+				UInt32 		render_flags_3d = kSpatialMixerRenderingFlags_DistanceAttenuation;
 				if (mRenderQuality == ALC_MAC_OSX_SPATIAL_RENDERING_QUALITY_HIGH)
-					render_flags_3d += k3DMixerRenderingFlags_InterAuralDelay; // off by default, on if the user sets High Quality rendering
+					render_flags_3d |= kSpatialMixerRenderingFlags_InterAuralDelay; // off by default, on if the user sets High Quality rendering
 
 				// Render Flags
-				/*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_3DMixerRenderingFlags, kAudioUnitScope_Input,
+				/*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_SpatialMixerRenderingFlags, kAudioUnitScope_Input,
 												i, &render_flags_3d, sizeof(render_flags_3d));
 				
 				return (i);
@@ -1478,7 +1479,7 @@ Float32			OALContext::GetReverbEQFrequency()
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void	OALContext::SetReverbPreset (FSRef* inRef)
+void	OALContext::SetReverbPreset (CFURLRef fileURL)
 {
 #if LOG_CONTEXT_VERBOSE
 	DebugMessageN1("OALContext::SetReverbPreset() - OALContext = %ld", (long int) mSelfToken);
@@ -1486,8 +1487,7 @@ void	OALContext::SetReverbPreset (FSRef* inRef)
 	try {
 			Boolean				status; 
 			SInt32				result = 0;
-			CFURLRef			fileURL = CFURLCreateFromFSRef (kCFAllocatorDefault, inRef);
-			if (fileURL) 
+			if (fileURL)
 			{
 				// Read the XML file.
 				CFDataRef		resourceData = NULL;
@@ -1499,9 +1499,9 @@ void	OALContext::SetReverbPreset (FSRef* inRef)
 					throw (OSStatus) -1;			
 				else
 				{
-					CFStringRef			errString = NULL;
+					CFErrorRef			errString = NULL;
 					CFPropertyListRef   theData = NULL;
-					theData = CFPropertyListCreateFromXMLData (kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, &errString);
+					theData = CFPropertyListCreateWithData (kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, NULL, &errString);
 					CFRelease (resourceData);
 					if (errString)
 						CFRelease (errString);
@@ -1514,7 +1514,7 @@ void	OALContext::SetReverbPreset (FSRef* inRef)
 					}
 					else
 					{
-						result = AudioUnitSetProperty(mMixerUnit, 3012 /*kAudioUnitProperty_ReverbPreset*/, kAudioUnitScope_Global, 0, &theData, sizeof(theData) );
+						result = AudioUnitSetProperty(mMixerUnit,  kAudioUnitProperty_ReverbPreset, kAudioUnitScope_Global, 0, &theData, sizeof(theData) );
 						CFRelease (theData);
 						THROW_RESULT
 					}				

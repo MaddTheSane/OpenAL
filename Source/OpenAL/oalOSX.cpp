@@ -603,7 +603,7 @@ ALUTAPI ALvoid ALUTAPIENTRY alutLoadWAVMemory(ALbyte *memory,ALenum *format,ALvo
 							memset(*data,0,ChunkHdr.Size+31);
 						}
 						else{
-							realloc(*data,ChunkHdr.Size + 31);
+							*data=realloc(*data,ChunkHdr.Size + 31);
 							memset(*data,0,ChunkHdr.Size+31);
 						}
 						if (*data) 
@@ -680,24 +680,36 @@ ALUTAPI ALvoid ALUTAPIENTRY alutLoadWAVFile(ALbyte *file,ALenum *format,ALvoid *
 {
 	OSStatus		err = noErr;
 	AudioFileID		audioFile = 0;
-	FSRef			fsRef;
+	CFURLRef		fsRef;
+	CFStringRef 	str = CFStringCreateWithFileSystemRepresentation(kCFAllocatorDefault, file);
 
 	*data = NULL; // in case of failure, do not return some unitialized value as a bogus address
 
-	if (IsRelativePath(file))
-	{
-		char			absolutePath[256];
-		// we need to make a full path here so FSPathMakeRef() works properly
-		MakeAbsolutePath(file, absolutePath, 256);
-		// create an fsref from the file parameter
-		err = FSPathMakeRef ((const UInt8 *) absolutePath, &fsRef, NULL);
+	if (str == NULL) {
+		err = fnfErr;
 	}
-	else
-		err = FSPathMakeRef ((const UInt8 *) file, &fsRef, NULL);
+	if (err == noErr)
+	{
+		if (IsRelativePath(file))
+		{
+			char currentPath[256];
+			getcwd(currentPath, sizeof(currentPath));
+			CFStringRef currentPathRef = CFStringCreateWithFileSystemRepresentation(kCFAllocatorDefault, currentPath);
+			CFURLRef currentURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, currentPathRef, kCFURLPOSIXPathStyle, true);
+			CFRelease(currentPathRef);
+			fsRef = CFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, str, kCFURLPOSIXPathStyle, false, currentURL);
+			CFRelease(currentURL);
+		}
+		else
+		{
+			fsRef = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, str, kCFURLPOSIXPathStyle, false);
+		}
+	}
 	
 	if (err == noErr)
 	{
-		err = AudioFileOpen(&fsRef, kAudioFileReadPermission, 0, &audioFile);
+		err = AudioFileOpenURL(fsRef, kAudioFileReadPermission, 0, &audioFile);
+		CFRelease(fsRef);
 		if (err == noErr)
 		{
 			UInt32							dataSize;
@@ -790,8 +802,9 @@ AL_API ALvoid AL_APIENTRY alExit(void)
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // count the leading zeroes in a word
 static __inline__ int CountLeadingZeroes(int arg) {
-
-#if TARGET_CPU_X86 || TARGET_CPU_X86_64
+#if __has_builtin(__builtin_clz)
+	return __builtin_clz(arg);
+#elif TARGET_CPU_X86 || TARGET_CPU_X86_64
 	__asm__ volatile(
 				"bsrl %0, %0\n\t"
 				"movl $63, %%ecx\n\t"
@@ -802,6 +815,8 @@ static __inline__ int CountLeadingZeroes(int arg) {
 			);
 #elif TARGET_CPU_PPC || TARGET_CPU_PPC64	
 	__asm__ volatile("cntlzw %0, %1" : "=r" (arg) : "r" (arg));
+#elif TARGET_CPU_ARM || TARGET_CPU_ARM64
+	__asm__ volatile("clz %0, %1" : "=r" (arg) : "r" (arg));
 #else
 	#error "ERROR - assembly instructions for counting leading zeroes not present"
 #endif

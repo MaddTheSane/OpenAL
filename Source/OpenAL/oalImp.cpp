@@ -172,8 +172,9 @@ char* GetALExtensionList()
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 UInt32 Get3DMixerVersion ()
 {
-	static	UInt32		mixerVersion = kUnknown3DMixerVersion;
+	static	UInt32		mixerVersion = k3DMixerVersion_2_3;
 	
+#if 0
 	if (mixerVersion == kUnknown3DMixerVersion)
 	{
 
@@ -220,6 +221,7 @@ UInt32 Get3DMixerVersion ()
 			mixerVersion = k3DMixerVersion_2_3;
 		}
 	}
+#endif
 
     return	mixerVersion;
 }
@@ -577,14 +579,14 @@ ALCint   alcCheckUnitIsPresent(OSType componentSubType)
 {
 	ALCint isPresent = kUnknownAUState;
 	
-	ComponentDescription	desc;
+	AudioComponentDescription	desc;
 	desc.componentFlags = 0;        
 	desc.componentFlagsMask = 0;     
 	desc.componentType = kAudioUnitType_Effect;          
 	desc.componentSubType = componentSubType;       
 	desc.componentManufacturer = kAudioUnitManufacturer_Apple;  
 
-	isPresent = (FindNextComponent(0, &desc) != 0) ? kAUIsPresent : kAUIsNotPresent;
+	isPresent = (AudioComponentFindNext(0, &desc) != 0) ? kAUIsPresent : kAUIsNotPresent;
 	
 	return isPresent;
 }
@@ -4984,6 +4986,17 @@ ALC_API ALenum  alcASAGetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
 	return err;
 }
 
+static bool CreateCFURLFromData(CFAllocatorRef allocator, const char *path, CFURLRef *outRef)
+{
+	CFStringRef strPath = CFStringCreateWithFileSystemRepresentation(allocator, path);
+	if (!strPath) {
+		return false;
+	}
+	*outRef = CFURLCreateWithFileSystemPath(allocator, strPath, kCFURLPOSIXPathStyle, false);
+	CFRelease(strPath);
+	return true;
+}
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ALC_API ALenum  alcASASetSource(ALuint property, ALuint sid, ALvoid *data, ALuint dataSize)
 {
@@ -5000,7 +5013,7 @@ ALC_API ALenum  alcASASetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
 	try {
 		oalSource = ProtectSourceObjectInCurrentContext(sid);
 
-		FSRef nuRef;
+		CFURLRef nuRef = NULL;
         switch (property) 
         {
 			// Source & Listener Attributes
@@ -5049,9 +5062,10 @@ ALC_API ALenum  alcASASetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
             case ALC_ASA_ROGER_BEEP_PRESET:
 				if(!IsRogerBeepPresent())
 					throw (OSStatus) AL_INVALID_OPERATION;
-				if (FSPathMakeRef((UInt8 *) data , &nuRef, NULL))
+				if (CreateCFURLFromData(NULL, (const char *) data , &nuRef))
 					throw (OSStatus) AL_INVALID_OPERATION;
-				oalSource->SetRogerBeepPreset(&nuRef);
+				oalSource->SetRogerBeepPreset(nuRef);
+				CFRelease(nuRef);
                 break;			
             case ALC_ASA_DISTORTION_ENABLE:
 				if((!IsDistortionPresent()) || (dataSize < sizeof(Boolean)))
@@ -5076,9 +5090,10 @@ ALC_API ALenum  alcASASetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
             case ALC_ASA_DISTORTION_PRESET:
 				if(!IsDistortionPresent())
 					throw (OSStatus) AL_INVALID_OPERATION;
-				if (FSPathMakeRef((UInt8 *) data , &nuRef, NULL))
+				if (CreateCFURLFromData(NULL, (const char *) data , &nuRef))
 					throw (OSStatus) AL_INVALID_OPERATION;
-				oalSource->SetDistortionPreset(&nuRef);
+				oalSource->SetDistortionPreset(nuRef);
+				CFRelease(nuRef);
                 break;					
             default:
 				err = AL_INVALID_NAME;
@@ -5232,11 +5247,12 @@ ALC_API ALenum  alcASASetListener(ALuint property, ALvoid *data, ALuint dataSize
 				if ((dataSize == 0) || (data == NULL))
 					throw ((OSStatus) AL_INVALID_OPERATION);
 				
-				FSRef	nuRef;
-				if (FSPathMakeRef((UInt8 *) data , &nuRef, NULL))
-					throw ((OSStatus) AL_INVALID_OPERATION);
+				CFStringRef nuString = CFStringCreateWithFileSystemRepresentation(kCFAllocatorDefault, (const char *)data);
+				CFURLRef	nuRef = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, nuString, kCFURLPOSIXPathStyle, false);
+				CFRelease(nuString);
 						
-				oalContext->SetReverbPreset(&nuRef);
+				oalContext->SetReverbPreset(nuRef);
+				CFRelease(nuRef);
 			}
 				break;
 

@@ -145,8 +145,8 @@ class OALBuffer
 	OSStatus						AddAudioData(	char*		inAudioData, UInt32	inAudioDataSize, ALenum format, ALsizei freq, bool	inPreConvertToHalFormat);													
 	OSStatus						AddAudioDataStatic(char*	inAudioData, UInt32	inAudioDataSize, ALenum format, ALsizei freq);
 
-	void							SetInUseFlag()					{ OSAtomicIncrement32Barrier(&mInUseFlag); }
-	void							ClearInUseFlag()				{ OSAtomicDecrement32Barrier(&mInUseFlag); }
+	void							SetInUseFlag()					{ std::atomic_fetch_add(&mInUseFlag, 1); }
+	void							ClearInUseFlag()				{ std::atomic_fetch_add(&mInUseFlag, -1); }
     void							SetIsInPostRenderMessageQueue(bool state) { mIsInPostRenderMessageQueue = state; }
 	bool							IsInPostRenderMessageQueue()           { return mIsInPostRenderMessageQueue == true; }
 	bool							IsPurgable();
@@ -179,7 +179,7 @@ private:
 	CAGuard							mSourceListGuard;
 #endif
 	CAGuard							mBufferLock;				// lock to serialize all buffer manipulations
-	volatile int32_t				mInUseFlag;					// flag to indicate if the buffer is currently being edited by one or more threads
+	std::atomic<int32_t>			mInUseFlag;					// flag to indicate if the buffer is currently being edited by one or more threads
 	UInt8							*mData;						// ptr to the actual audio data
 	bool							mAppOwnsBufferMemory;		// true when data is passed in via the alBufferDtatStatic API (extension)
 	UInt32							mDataSize;					// size in bytes of the audio data ptr

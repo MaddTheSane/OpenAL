@@ -28,6 +28,7 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <AudioUnit/AudioUnit.h>
 #include <map>
+#include <atomic>
 #include <libkern/OSAtomic.h>
 
 #include "oalImp.h"
@@ -61,8 +62,8 @@ class OALCaptureDevice
 	ALenum				GetError();
 
 	// we need to mark the capture device if it is being used to prevent deletion from another thread
-	void				SetInUseFlag()		{ OSAtomicIncrement32Barrier(&mInUseFlag); }	
-	void				ClearInUseFlag()	{ OSAtomicDecrement32Barrier(&mInUseFlag); }
+	void				SetInUseFlag()		{ std::atomic_fetch_add(&mInUseFlag, 1); }
+	void				ClearInUseFlag()	{ std::atomic_fetch_add(&mInUseFlag, -1); }
 	volatile int32_t	IsInUse()			{ return mInUseFlag; }
 
 #pragma mark __________ Private_Class_Members
@@ -75,7 +76,7 @@ class OALCaptureDevice
 		bool							mCaptureOn;
 		SInt64							mStoreSampleTime;				// increment on each read in the input proc, and pass to the ring buffer class when writing, reset on each stop
 		SInt64							mFetchSampleTime;				// increment on each read in the input proc, and pass to the ring buffer class when writing, reset on each stop
-		AudioUnit						mInputUnit;
+		AudioFileComponent				mInputUnit;
 		CAStreamBasicDescription		mNativeFormat;
 		CAStreamBasicDescription		mRequestedFormat;
 		CAStreamBasicDescription		mOutputFormat;
@@ -85,7 +86,7 @@ class OALCaptureDevice
 		Float64							mSampleRateRatio;
 		UInt32							mRequestedRingFrames;			
 		CABufferList*					mAudioInputPtrs;
-		volatile int32_t				mInUseFlag;						// flag to indicate the device is currently being used by one or more threads
+		volatile std::atomic<int32_t>	mInUseFlag;						// flag to indicate the device is currently being used by one or more threads
 
 	void				InitializeAU (const char* 	inDeviceName);
 	static OSStatus		InputProc(	void *						inRefCon,

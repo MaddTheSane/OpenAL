@@ -454,7 +454,7 @@ OSStatus	OALSource::SetDistanceParams(bool	inChangeReferenceDistance, bool inCha
 	{
 		MixerDistanceParams		distanceParams;
 		UInt32					propSize = sizeof(distanceParams);
-		result = AudioUnitGetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_3DMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, &propSize);
+		result = AudioUnitGetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_SpatialMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, &propSize);
 		if (result == noErr)
 		{
 			Float32     rollOff = mRollOffFactor;
@@ -481,7 +481,7 @@ OSStatus	OALSource::SetDistanceParams(bool	inChangeReferenceDistance, bool inCha
 			if ((mReferenceDistance == mMaxDistance) && (Get3DMixerVersion() < k3DMixerVersion_2_2))
 				distanceParams.mMaxDistance = distanceParams.mReferenceDistance + .01; // pre 2.2 3DMixer may crash  if max and reference distances are equal
 			
-			result = AudioUnitSetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_3DMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, sizeof(distanceParams));
+			result = AudioUnitSetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_SpatialMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, sizeof(distanceParams));
 		}
 	}
 	
@@ -1531,7 +1531,7 @@ void	OALSource::SetupMixerBus()
 				// Set the MixerDistanceParams for the new bus if necessary
 				MixerDistanceParams		distanceParams;
 				propSize = sizeof(distanceParams);
-				result = AudioUnitGetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_3DMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, &propSize);
+				result = AudioUnitGetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_SpatialMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, &propSize);
 
 				if  ((result == noErr) 	&& ((distanceParams.mReferenceDistance != refDistance)      ||
 											(distanceParams.mMaxDistance != maxDistance)            ||
@@ -1556,7 +1556,7 @@ void	OALSource::SetupMixerBus()
 					if ((mReferenceDistance == mMaxDistance) && (Get3DMixerVersion() < k3DMixerVersion_2_2))
 						distanceParams.mMaxDistance = distanceParams.mReferenceDistance + .01; // pre 2.2 3DMixer may crash  if max and reference distances are equal
 
-					/*result =*/ AudioUnitSetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_3DMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, sizeof(distanceParams));
+					/*result =*/ AudioUnitSetProperty(mOwningContext->GetMixerUnit(), kAudioUnitProperty_SpatialMixerDistanceParams, kAudioUnitScope_Input, mCurrentPlayBus, &distanceParams, sizeof(distanceParams));
 				}
 			}
 			else
@@ -1635,7 +1635,7 @@ void OALSource::SetupRogerBeepAU()
 	DebugMessageN1("OALSource::SetupRogerBeepAU called - OALSource = %ld\n", (long int) mSelfToken);
 #endif
 		
-	ComponentDescription desc;
+	AudioComponentDescription desc;
 	desc.componentFlags = 0;        
 	desc.componentFlagsMask = 0;     
 	desc.componentType = kAudioUnitType_Effect;          
@@ -1643,10 +1643,10 @@ void OALSource::SetupRogerBeepAU()
 	desc.componentManufacturer = kAudioUnitManufacturer_Apple;  
 
 	// CREATE NEW NODE FOR THE GRAPH
-	OSStatus result = AUGraphNewNode (mOwningContext->GetGraph(), &desc, 0, NULL, &mRogerBeepNode);
+	OSStatus result = AUGraphAddNode (mOwningContext->GetGraph(), &desc, &mRogerBeepNode);
 		THROW_RESULT
 
-	result = AUGraphGetNodeInfo (mOwningContext->GetGraph(), mRogerBeepNode, 0, 0, 0, &mRogerBeepAU);
+	result = AUGraphNodeInfo (mOwningContext->GetGraph(), mRogerBeepNode, NULL, &mRogerBeepAU);
 		THROW_RESULT   
 }
 
@@ -1655,7 +1655,7 @@ void OALSource::SetupDistortionAU()
 #if LOG_VERBOSE
 	DebugMessageN1("OALSource::SetupDistortionAU called - OALSource = %ld\n", (long int) mSelfToken);
 #endif
-	ComponentDescription desc;
+	AudioComponentDescription desc;
 	desc.componentFlags = 0;        
 	desc.componentFlagsMask = 0;     
 	desc.componentType = kAudioUnitType_Effect;          
@@ -1663,10 +1663,10 @@ void OALSource::SetupDistortionAU()
 	desc.componentManufacturer = kAudioUnitManufacturer_Apple;  
 
 	// CREATE NEW NODE FOR THE GRAPH
-	OSStatus result = AUGraphNewNode (mOwningContext->GetGraph(), &desc, 0, NULL, &mDistortionNode);
+	OSStatus result = AUGraphAddNode (mOwningContext->GetGraph(), &desc, &mDistortionNode);
 		THROW_RESULT
 
-	result = AUGraphGetNodeInfo (mOwningContext->GetGraph(), mDistortionNode, 0, 0, 0, &mDistortionAU);
+	result = AUGraphNodeInfo (mOwningContext->GetGraph(), mDistortionNode, 0, &mDistortionAU);
 		THROW_RESULT   
 }
 
@@ -1807,7 +1807,7 @@ void	OALSource::Play()
 						if(!mASADistortionEnable)
 						{
 							// connect render proc to unit if distortion is not enabled
-							result = AUGraphGetNodeInfo (mOwningContext->GetGraph(), mRogerBeepNode, 0, 0, 0, &mRenderUnit);
+							result = AUGraphNodeInfo (mOwningContext->GetGraph(), mRogerBeepNode, NULL, &mRenderUnit);
 								THROW_RESULT;
 						}
 					}
@@ -1824,7 +1824,7 @@ void	OALSource::Play()
 							THROW_RESULT
 						
 						// distortion unit will always be first if it exists
-						result = AUGraphGetNodeInfo (mOwningContext->GetGraph(), mDistortionNode, 0, 0, 0, &mRenderUnit);
+						result = AUGraphNodeInfo (mOwningContext->GetGraph(), mDistortionNode, NULL, &mRenderUnit);
 							THROW_RESULT
 						
 						if(mASARogerBeepEnable)
@@ -4356,7 +4356,7 @@ void	OALSource::SetRogerBeepType(SInt32 inType)
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void	OALSource::SetRogerBeepPreset(FSRef* inRef)
+void	OALSource::SetRogerBeepPreset(CFURLRef fileURL)
 {
 #if LOG_VERBOSE
     DebugMessageN2("OALSource::SetRogerBeepPreset - OALSource:inRef = %ld:%p\n", (long int) mSelfToken, inRef);
@@ -4367,8 +4367,7 @@ void	OALSource::SetRogerBeepPreset(FSRef* inRef)
 	try {
 			Boolean				status; 
 			SInt32				result = 0;
-			CFURLRef			fileURL = CFURLCreateFromFSRef (kCFAllocatorDefault, inRef);
-			if (fileURL) 
+			if (fileURL)
 			{
 				// Read the XML file.
 				CFDataRef		resourceData = NULL;
@@ -4380,9 +4379,9 @@ void	OALSource::SetRogerBeepPreset(FSRef* inRef)
 					throw (OSStatus) -1;			
 				else
 				{
-					CFStringRef			errString = NULL;
+					CFErrorRef			errString = NULL;
 					CFPropertyListRef   theData = NULL;
-					theData = CFPropertyListCreateFromXMLData (kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, &errString);
+					theData = CFPropertyListCreateWithData (kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, NULL, &errString);
 					CFRelease (resourceData);
 					if (errString)
 						CFRelease (errString);
@@ -4544,7 +4543,7 @@ void	OALSource::SetDistortionType(SInt32 inType)
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void	OALSource::SetDistortionPreset(FSRef* inRef)
+void	OALSource::SetDistortionPreset(CFURLRef fileURL)
 {
 #if LOG_VERBOSE
     DebugMessageN2("OALSource::SetDistortionPreset - OALSource:inRef = %ld:%p\n", (long int) mSelfToken, inRef);
@@ -4555,7 +4554,6 @@ void	OALSource::SetDistortionPreset(FSRef* inRef)
 	try {
 			Boolean				status; 
 			SInt32				result = 0;
-			CFURLRef			fileURL = CFURLCreateFromFSRef (kCFAllocatorDefault, inRef);
 			if (fileURL) 
 			{
 				// Read the XML file.
@@ -4568,9 +4566,9 @@ void	OALSource::SetDistortionPreset(FSRef* inRef)
 					throw (OSStatus) -1;			
 				else
 				{
-					CFStringRef			errString = NULL;
+					CFErrorRef			errString = NULL;
 					CFPropertyListRef   theData = NULL;
-					theData = CFPropertyListCreateFromXMLData (kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, &errString);
+					theData = CFPropertyListCreateWithData (kCFAllocatorDefault, resourceData, kCFPropertyListImmutable, NULL, &errString);
 					CFRelease (resourceData);
 					if (errString)
 						CFRelease (errString);
