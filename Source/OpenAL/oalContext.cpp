@@ -386,7 +386,7 @@ void		OALContext::InitializeMixer(UInt32	inStereoBusCount)
 			UInt32		spatAlgo = (theOutFormat.mChannelsPerFrame == 2) ? kSpatializationAlgorithm_StereoPassThrough : mSpatialSetting;
 			AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_SpatializationAlgorithm, kAudioUnitScope_Input, i, &spatAlgo, sizeof(spatAlgo));
 
-			// set kAudioUnitProperty_3DMixerRenderingFlags (distance attenuation) for mono busses
+			// set kAudioUnitProperty_SpatialMixerRenderingFlags (distance attenuation) for mono busses
 			if (theOutFormat.mChannelsPerFrame == 1)
 			{
 				UInt32 		render_flags_3d = kSpatialMixerRenderingFlags_DistanceAttenuation;
@@ -665,10 +665,10 @@ void		OALContext::SetDistanceModel(UInt32	inDistanceModel)
 				mCalculateDistance = true;
 				if (mSettableMixerAttenuationCurves)
 				{
-					curve =2 /* k3DMixerAttenuationCurve_Inverse*/;
+					curve = kSpatialMixerAttenuationCurve_Inverse;
 					for (UInt32	i = 0; i < mBusCount; i++)
 					{
-						/*result =*/ AudioUnitSetProperty(	mMixerUnit, 3013 /*kAudioUnitProperty_3DMixerAttenuationCurve*/, kAudioUnitScope_Input, i, &curve, sizeof(curve));
+						/*result =*/ AudioUnitSetProperty(	mMixerUnit,  kAudioUnitProperty_SpatialMixerAttenuationCurve, kAudioUnitScope_Input, i, &curve, sizeof(curve));
 					}
 				}
 				else
@@ -696,10 +696,10 @@ void		OALContext::SetDistanceModel(UInt32	inDistanceModel)
 				if (mSettableMixerAttenuationCurves)
 				{	
 					mCalculateDistance = true;
-					curve = 3 /*k3DMixerAttenuationCurve_Linear*/;
+					curve = kSpatialMixerAttenuationCurve_Linear;
 					for (UInt32	i = 0; i < mBusCount; i++)
 					{
-						/*result =*/ AudioUnitSetProperty(	mMixerUnit, 3013 /*kAudioUnitProperty_3DMixerAttenuationCurve*/, kAudioUnitScope_Input, i, &curve, sizeof(curve));
+						/*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_SpatialMixerAttenuationCurve, kAudioUnitScope_Input, i, &curve, sizeof(curve));
 					}
 				}
 				else
@@ -716,10 +716,10 @@ void		OALContext::SetDistanceModel(UInt32	inDistanceModel)
 				{
 					mCalculateDistance = true;
 					// set the mixer for Exponential Attenuation
-					curve = 1 /*k3DMixerAttenuationCurve_Exponential*/;
+					curve = kSpatialMixerAttenuationCurve_Exponential;
 					for (UInt32	i = 0; i < mBusCount; i++)
 					{
-						/*result =*/ AudioUnitSetProperty(	mMixerUnit, 3013 /*kAudioUnitProperty_3DMixerAttenuationCurve*/, kAudioUnitScope_Input, i, &curve, sizeof(curve));
+						/*result =*/ AudioUnitSetProperty(	mMixerUnit, kAudioUnitProperty_SpatialMixerAttenuationCurve, kAudioUnitScope_Input, i, &curve, sizeof(curve));
 					}
 				}
 				else
@@ -1120,7 +1120,7 @@ end:
 UInt32 OALContext::GetRenderQualityForBus (int inBus)
 {
 #if LOG_CONTEXT_VERBOSE
-    DebugMessageN1(XLOG_TRACE, kOALLogScope_Context, "OALContext::GetRenderQualityForBus() - inBus = %d", inBus);
+    DebugMessageN1("OALContext::GetRenderQualityForBus() - inBus = %d", inBus);
 #endif
     
     //if we encounter any errors along the way, return the context's render quality
@@ -1354,7 +1354,7 @@ void	OALContext::SetReverbLevel(Float32 inReverbLevel)
 
     mASAReverbGlobalLevel = inReverbLevel;
         
-	OSStatus	result = AudioUnitSetParameter (mMixerUnit, 6 /*k3DMixerParam_GlobalReverbGain*/, kAudioUnitScope_Global, 0, mASAReverbGlobalLevel, 0);
+	OSStatus	result = AudioUnitSetParameter (mMixerUnit, kSpatialMixerParam_GlobalReverbGain, kAudioUnitScope_Global, 0, mASAReverbGlobalLevel, 0);
 		THROW_RESULT
 }
 

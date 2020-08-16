@@ -2771,7 +2771,7 @@ void	OALSource::UpdateMaxBusGain ()
 #endif	
 	if (mCurrentPlayBus != kSourceNeedsBus)
 	{
-		OSStatus	result = AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), k3DMixerParam_MaxGain, kAudioUnitScope_Input, mCurrentPlayBus, mMaxGain, 0);
+		OSStatus	result = AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), kSpatialMixerParam_MaxGain, kAudioUnitScope_Input, mCurrentPlayBus, mMaxGain, 0);
         THROW_RESULT
 	} 
 }
@@ -2829,7 +2829,7 @@ void	OALSource::UpdateBusReverb ()
 		if (mOwningContext->GetReverbState() == 0)	// either reverb is off or not available on this system
 			return;     
 
-		AudioUnitSetParameter(mOwningContext->GetMixerUnit(), 5 /*k3DMixerParam_ReverbBlend*/, kAudioUnitScope_Input, mCurrentPlayBus, mASAReverbSendLevel * 100.0, 0);
+		AudioUnitSetParameter(mOwningContext->GetMixerUnit(), kSpatialMixerParam_ReverbBlend, kAudioUnitScope_Input, mCurrentPlayBus, mASAReverbSendLevel * 100.0, 0);
 	}
 }
 
@@ -2845,7 +2845,7 @@ void	OALSource::UpdateBusOcclusion ()
 		if (Get3DMixerVersion() < k3DMixerVersion_2_2)	// the pre-2.2 3DMixer does not have occlusion
 			return;
 		
-		AudioUnitSetParameter(mOwningContext->GetMixerUnit(), 7 /*k3DMixerParam_OcclusionAttenuation*/, kAudioUnitScope_Input, mCurrentPlayBus, mASAOcclusion, 0);
+		AudioUnitSetParameter(mOwningContext->GetMixerUnit(), kSpatialMixerParam_OcclusionAttenuation, kAudioUnitScope_Input, mCurrentPlayBus, mASAOcclusion, 0);
 	}
 }
 
@@ -2861,7 +2861,7 @@ void	OALSource::UpdateBusObstruction ()
 		if (Get3DMixerVersion() < k3DMixerVersion_2_2)	// the pre-2.2 3DMixer does not have obstruction
 			return;
 		
-		AudioUnitSetParameter(mOwningContext->GetMixerUnit(), 8 /*k3DMixerParam_ObstructionAttenuation*/, kAudioUnitScope_Input, mCurrentPlayBus, mASAObstruction, 0);
+		AudioUnitSetParameter(mOwningContext->GetMixerUnit(), kSpatialMixerParam_ObstructionAttenuation, kAudioUnitScope_Input, mCurrentPlayBus, mASAObstruction, 0);
 	}
 }
 
