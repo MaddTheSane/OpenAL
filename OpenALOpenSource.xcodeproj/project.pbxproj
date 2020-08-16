@@ -163,6 +163,7 @@
 		55014E2F24E8ACE9005F6349 /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
 		55014E3424E8EBF6005F6349 /* OpenAL.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = OpenAL.modulemap; path = Source/OpenAL/Modules/OpenAL.modulemap; sourceTree = "<group>"; };
 		55014E3524E8ECBC005F6349 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
+		55014E3724E8FD04005F6349 /* CAAtomic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAtomic.h; sourceTree = "<group>"; };
 		8A0561E40546034200A003E7 /* oalOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oalOSX.h; sourceTree = "<group>"; };
 		8A0561E50546034200A003E7 /* oalOSX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oalOSX.cpp; sourceTree = "<group>"; };
 		8A0CB5BD097F5FC000B17352 /* CAAudioUnitOutputCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAAudioUnitOutputCapturer.h; sourceTree = "<group>"; };
@@ -315,6 +316,7 @@
 		F40E4CDD065E5DB9004336C3 /* PublicUtility */ = {
 			isa = PBXGroup;
 			children = (
+				55014E3724E8FD04005F6349 /* CAAtomic.h */,
 				55014E2324E8AC5C005F6349 /* CAAtomicStack.h */,
 				8A0CB5BD097F5FC000B17352 /* CAAudioUnitOutputCapturer.h */,
 				8A3A1DA208EC575A008DD7C5 /* CABufferList.h */,
@@ -335,8 +337,8 @@
 				55014E2E24E8ACE9005F6349 /* CAXException.cpp */,
 			);
 			name = PublicUtility;
-			path = /Users/cwbetts/DeveloperStuff/CoreAudioUtilityClasses/CoreAudio/PublicUtility;
-			sourceTree = "<absolute>";
+			path = CoreAudio/PublicUtility;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 

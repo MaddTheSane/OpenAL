@@ -47,11 +47,7 @@
 #ifndef __CAAtomicStack_h__
 #define __CAAtomicStack_h__
 
-#if !defined(__COREAUDIO_USE_FLAT_INCLUDES__)
-	#include <libkern/OSAtomic.h>
-#else
-	#include <CAAtomic.h>
-#endif
+#include "CAAtomic.h"
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_4
 	#include <CoreServices/CoreServices.h>
@@ -160,7 +156,13 @@ public:
 	
 	static bool	compare_and_swap(T *oldvalue, T *newvalue, T **pvalue)
 	{
-#if TARGET_OS_MAC
+#if (__has_include(<atomic>) && __has_extension(cxx_atomic))
+#if __LP64__
+		return CAAtomicCompareAndSwap64Barrier(int64_t(oldvalue), int64_t(newvalue), (int64_t *)pvalue);
+#else
+		return CAAtomicCompareAndSwap32Barrier(SInt32(oldvalue), SInt32(newvalue), (SInt32*)pvalue);
+#endif
+#elif TARGET_OS_MAC
 	#if __LP64__
 			return ::OSAtomicCompareAndSwap64Barrier(int64_t(oldvalue), int64_t(newvalue), (int64_t *)pvalue);
 	#elif MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
