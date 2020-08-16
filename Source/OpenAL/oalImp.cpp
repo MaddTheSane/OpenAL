@@ -5248,6 +5248,9 @@ ALC_API ALenum  alcASASetListener(ALuint property, ALvoid *data, ALuint dataSize
 					throw ((OSStatus) AL_INVALID_OPERATION);
 				
 				CFStringRef nuString = CFStringCreateWithFileSystemRepresentation(kCFAllocatorDefault, (const char *)data);
+				if (!nuString) {
+					throw ((OSStatus) AL_INVALID_OPERATION);
+				}
 				CFURLRef	nuRef = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, nuString, kCFURLPOSIXPathStyle, false);
 				CFRelease(nuString);
 						
