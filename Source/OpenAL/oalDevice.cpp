@@ -400,7 +400,11 @@ void OALDevice::InitializeGraph (const char* 		inDeviceName)
 	if (result == noErr)
 	{
 		dataSize = sizeof(mFramesPerSlice);
-		result = AudioDeviceGetProperty(device, 0, false, kAudioDevicePropertyBufferFrameSize, &dataSize, &mFramesPerSlice);
+		AudioObjectPropertyAddress propAddr;
+		propAddr.mScope = kAudioUnitScope_Global;
+		propAddr.mSelector = kAudioDevicePropertyBufferFrameSize;
+		propAddr.mElement = kAudioObjectPropertyElementMaster;
+		result = AudioObjectGetPropertyData(device, &propAddr, 0, NULL, &dataSize, &mFramesPerSlice);
 		if (result == noErr)
 		{
 			/*result =*/ AudioUnitSetProperty(  mOutputUnit, kAudioUnitProperty_MaximumFramesPerSlice,
@@ -438,15 +442,19 @@ UInt32 OALDevice::GetDesiredRenderChannelCount ()
 	OSStatus	result = AudioUnitGetProperty(mOutputUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Output, 1, &deviceID, &propSize);
 		THROW_RESULT
 	
-	// get the channel layout set by the user in AMS		
-	result = AudioDeviceGetPropertyInfo(deviceID, 0, false, kAudioDevicePropertyPreferredChannelLayout, &propSize, NULL);
+	// get the channel layout set by the user in AMS
+	AudioObjectPropertyAddress propAddr;
+	propAddr.mSelector = kAudioDevicePropertyPreferredChannelLayout;
+	propAddr.mScope = kAudioObjectPropertyScopeOutput;
+	propAddr.mElement = kAudioObjectPropertyElementMaster;
+	result = AudioObjectGetPropertyDataSize(deviceID, &propAddr, 0, NULL, &propSize);
 
 	if (result == noErr)
 	{
 		AudioChannelLayout* layout = (AudioChannelLayout *) calloc(1, propSize);
 		if (layout != NULL)
 		{
-			/*result =*/ AudioDeviceGetProperty(deviceID, 0, false, kAudioDevicePropertyPreferredChannelLayout, &propSize, layout);
+			/*result =*/ AudioObjectGetPropertyData(deviceID, &propAddr, 0, NULL, &propSize, layout);
 
 			if (layout->mChannelLayoutTag == kAudioChannelLayoutTag_UseChannelDescriptions)
 			{
