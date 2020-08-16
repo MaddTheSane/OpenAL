@@ -161,7 +161,7 @@
 		55014E2724E8ACC8005F6349 /* oalCaptureMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oalCaptureMixer.h; sourceTree = "<group>"; };
 		55014E2E24E8ACE9005F6349 /* CAXException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAXException.cpp; sourceTree = "<group>"; };
 		55014E2F24E8ACE9005F6349 /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
-		55014E3424E8EBF6005F6349 /* OpenAL.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = OpenAL.modulemap; path = Source/OpenAL/Modules/OpenAL.modulemap; sourceTree = "<group>"; };
+		55014E3424E8EBF6005F6349 /* OpenAL.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = OpenAL.modulemap; path = Source/OpenAL/Modules/OpenAL.modulemap; sourceTree = "<group>"; };
 		55014E3524E8ECBC005F6349 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
 		55014E3724E8FD04005F6349 /* CAAtomic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAtomic.h; sourceTree = "<group>"; };
 		8A0561E40546034200A003E7 /* oalOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oalOSX.h; sourceTree = "<group>"; };
@@ -206,7 +206,7 @@
 		F40E4D53065E5DB9004336C3 /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
 		F40E4D54065E5DB9004336C3 /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAStreamBasicDescription.h; sourceTree = "<group>"; };
 		F749ED7D0B6EC85700589706 /* OpenAL.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; name = OpenAL.plist; path = Source/OpenAL/OpenAL.plist; sourceTree = "<group>"; };
-		F749ED810B6ECB2A00589706 /* OpenAL.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; name = OpenAL.txt; path = Source/OpenAL/OpenAL.txt; sourceTree = "<group>"; };
+		F749ED810B6ECB2A00589706 /* OpenAL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = OpenAL.txt; path = Source/OpenAL/OpenAL.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
