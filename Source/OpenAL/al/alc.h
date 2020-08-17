@@ -41,7 +41,7 @@ extern "C" {
 #define ALC_INVALID 0
 
 #ifndef OPENAL_DEPRECATED
-#define OPENAL_DEPRECATED API_DEPRECATED("OpenAL is deprecated", macos(10.4, 10.15), ios(2.0, 13.0))
+#define OPENAL_DEPRECATED API_DEPRECATED("OpenAL is deprecated", macos(10.4, API_TO_BE_DEPRECATED), ios(2.0, API_TO_BE_DEPRECATED))
 #endif // OPENAL_DEPRECATED
 
 #define ALC_VERSION_0_1         1
