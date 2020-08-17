@@ -394,7 +394,7 @@ UInt32	OALCaptureDevice::AvailableFrames()
 	if (mFetchSampleTime < start)
 		mFetchSampleTime = start;	// move up our fetch starting point, we have fallen too far behind
 	
-	UInt32	availableFrames = end - mFetchSampleTime;
+	UInt32	availableFrames = UInt32(end - mFetchSampleTime);
 
 	if (availableFrames > mRequestedRingFrames*mSampleRateRatio)
 		availableFrames = mRequestedRingFrames*mSampleRateRatio;

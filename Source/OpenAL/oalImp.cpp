@@ -1237,7 +1237,7 @@ ALC_API const ALCchar *	ALC_APIENTRY alcGetString(ALCdevice *device, ALCenum pna
 				// we will need to update this mechanism to return all the devices available
 				if (device == NULL)
 				{
-					UInt32	length = strlen(gDefaultOutputDeviceName);
+					size_t	length = strlen(gDefaultOutputDeviceName);
 					gDefaultOutputDeviceName[length + 1] = '\0'; // double terminator
 				}
 				return gDefaultOutputDeviceName;
@@ -1265,7 +1265,7 @@ ALC_API const ALCchar *	ALC_APIENTRY alcGetString(ALCdevice *device, ALCenum pna
 				// we will need to update this mechanism to return all the devices available
 				if (device == NULL)
 				{
-					UInt32	length = strlen(gDefaultInputDeviceName);
+					size_t	length = strlen(gDefaultInputDeviceName);
 					gDefaultInputDeviceName[length + 1] = '\0'; // double terminator
 				}
 				return gDefaultInputDeviceName;

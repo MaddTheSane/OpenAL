@@ -730,12 +730,12 @@ ALUTAPI ALvoid ALUTAPIENTRY alutLoadWAVFile(ALbyte *file,ALenum *format,ALvoid *
 				err = AudioFileGetProperty(audioFile, kAudioFilePropertyAudioDataByteCount, &dataSize, &audioDataSize);
 				if (err == noErr)
 				{
-					*size = audioDataSize;
+					*size = (ALsizei)audioDataSize;
 					*data = NULL;
 					*data = calloc(1, audioDataSize);
 					if (*data)
 					{
-						dataSize = audioDataSize;
+						dataSize = (UInt32)audioDataSize;
 						/*err =*/ AudioFileReadBytes(audioFile, false, 0, &dataSize, *data);
 						
 #if TARGET_RT_BIG_ENDIAN
@@ -836,5 +836,5 @@ inline UInt32 Log2Ceil(UInt32 x)
 // next power of two greater or equal to x
 inline UInt32 NextPowerOfTwo(UInt32 x)
 {
-	return 1L << Log2Ceil(x);
+	return UInt32(1L << Log2Ceil(x));
 }

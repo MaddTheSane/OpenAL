@@ -242,7 +242,7 @@ public:
 		}
     }
 
-    UInt32 Size () const { return size(); }
+    UInt32 Size () const { return UInt32(size()); }
     bool Empty () const { return empty(); }
 };
 typedef	ACMap ACMap;
@@ -361,7 +361,7 @@ private:
 	OSStatus RemoveAllSourceNotificationsImp(ALuint inID)
 	{
 		SourceNotifications::iterator it;
-		for (int index = size() - 1; index >= 0; index--)
+		for (ssize_t index = size() - 1; index >= 0; index--)
 		{
 			it = begin() + index;
 			if (it->mID == inID)
@@ -829,7 +829,7 @@ public:
             erase(it);
     }
 
-    UInt32 Size () const { return size(); }
+    UInt32 Size () const { return UInt32(size()); }
     bool Empty () const { return empty(); }
 };
 

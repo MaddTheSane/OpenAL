@@ -7,7 +7,7 @@
 
 #include "oalUtility.h"
 
-CFDataRef createDataFromURL(CFURLRef theSrc)
+CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc)
 {
 	CFReadStreamRef readRef = CFReadStreamCreateWithFile(kCFAllocatorDefault, theSrc);
 	CFMutableDataRef toRet;

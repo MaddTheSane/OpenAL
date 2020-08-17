@@ -4373,7 +4373,7 @@ void	OALSource::SetRogerBeepPreset(CFURLRef fileURL)
 				// Read the XML file.
 				CFDataRef		resourceData = NULL;
 				
-				resourceData = createDataFromURL(fileURL);
+				resourceData = copyDataContentsOfFileAtURL(fileURL);
 				if (resourceData == NULL) {
 					status = false;
 				} else {
@@ -4565,7 +4565,7 @@ void	OALSource::SetDistortionPreset(CFURLRef fileURL)
 				// Read the XML file.
 				CFDataRef		resourceData = NULL;
 				
-				resourceData = createDataFromURL(fileURL);
+				resourceData = copyDataContentsOfFileAtURL(fileURL);
 				if (resourceData != NULL) {
 					status = true;
 				} else {

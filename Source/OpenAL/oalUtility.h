@@ -10,6 +10,14 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-CFDataRef createDataFromURL(CFURLRef theSrc);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* oalUtility_hpp */

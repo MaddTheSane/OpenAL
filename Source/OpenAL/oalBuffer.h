@@ -126,7 +126,7 @@ public:
         return (NULL);
     }
 
-    UInt32 Size () const { return size(); }
+    UInt32 Size () const { return UInt32(size()); }
     bool Empty () const { return empty(); }
 	void Reserve(UInt32 reserveSize) {return reserve(reserveSize); }
 };
