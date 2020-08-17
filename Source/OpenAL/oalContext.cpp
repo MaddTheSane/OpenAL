@@ -23,6 +23,7 @@
 
 #include "oalContext.h"
 #include "oalSource.h"
+#include "oalUtility.h"
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -981,18 +982,18 @@ void OALContext::InitRenderQualityOnBusses()
 		mSpatialSetting = kDefaultHighQuality;
 	}
 	
-	UInt32 		render_flags_3d = k3DMixerRenderingFlags_DistanceAttenuation;
+	UInt32 		render_flags_3d = kSpatialMixerRenderingFlags_DistanceAttenuation;
 	if (mRenderQuality == ALC_MAC_OSX_SPATIAL_RENDERING_QUALITY_HIGH)
 	{
     	 // off by default, on if the user sets High Quality rendering, as HRTF requires InterAuralDelay to be on
-         render_flags_3d += k3DMixerRenderingFlags_InterAuralDelay;     
+         render_flags_3d |= kSpatialMixerRenderingFlags_InterAuralDelay;     
 	}
     
     if (mASAReverbState > 0)
 	{
     	 // off by default, on if the user turns on Reverb, as it requires DistanceDiffusion to be on
-    	render_flags_3d += k3DMixerRenderingFlags_DistanceDiffusion;
-		render_flags_3d += (1L << 6 /* k3DMixerRenderingFlags_ConstantReverbBlend*/);    
+    	render_flags_3d |= k3DMixerRenderingFlags_DistanceDiffusion; //TODO: fixme/ find proper replacement
+		render_flags_3d |= k3DMixerRenderingFlags_ConstantReverbBlend; //TODO: fixme/ find proper replacement
 	}
     
 	OSStatus                    result = noErr;
@@ -1492,7 +1493,12 @@ void	OALContext::SetReverbPreset (CFURLRef fileURL)
 				// Read the XML file.
 				CFDataRef		resourceData = NULL;
 				
-				status = CFURLCreateDataAndPropertiesFromResource (kCFAllocatorDefault, fileURL, &resourceData,	NULL, NULL, &result);
+				resourceData = createDataFromURL(fileURL);
+				if (resourceData != NULL) {
+					status = true;
+				} else {
+					status = false;
+				}
 				CFRelease (fileURL);	// no longer needed
 				
 				if (status == false || result)				

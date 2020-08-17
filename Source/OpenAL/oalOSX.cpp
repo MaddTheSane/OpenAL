@@ -549,7 +549,7 @@ ALUTAPI ALvoid ALUTAPIENTRY alutLoadWAVMemory(ALbyte *memory,ALenum *format,ALvo
 	WAVFmtExHdr_Struct FmtExHdr;
 	WAVFileHdr_Struct FileHdr;
 	WAVSmplHdr_Struct SmplHdr;
-	WAVFmtHdr_Struct FmtHdr;
+	WAVFmtHdr_Struct FmtHdr = {0};
 	ALbyte *Stream;
 	
 	*format=AL_FORMAT_MONO16;
@@ -699,10 +699,12 @@ ALUTAPI ALvoid ALUTAPIENTRY alutLoadWAVFile(ALbyte *file,ALenum *format,ALvoid *
 			CFRelease(currentPathRef);
 			fsRef = CFURLCreateWithFileSystemPathRelativeToBase(kCFAllocatorDefault, str, kCFURLPOSIXPathStyle, false, currentURL);
 			CFRelease(currentURL);
+			CFRelease(str);
 		}
 		else
 		{
 			fsRef = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, str, kCFURLPOSIXPathStyle, false);
+			CFRelease(str);
 		}
 	}
 	

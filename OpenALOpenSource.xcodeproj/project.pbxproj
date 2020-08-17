@@ -30,6 +30,10 @@
 		55014E3224E8ACE9005F6349 /* CAXException.h in Headers */ = {isa = PBXBuildFile; fileRef = 55014E2F24E8ACE9005F6349 /* CAXException.h */; };
 		55014E3324E8ACE9005F6349 /* CAXException.h in Headers */ = {isa = PBXBuildFile; fileRef = 55014E2F24E8ACE9005F6349 /* CAXException.h */; };
 		55014E3624E8ECBC005F6349 /* OpenAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 55014E3524E8ECBC005F6349 /* OpenAL.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		55014E3A24EA660F005F6349 /* oalUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55014E3824EA660F005F6349 /* oalUtility.cpp */; };
+		55014E3B24EA660F005F6349 /* oalUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55014E3824EA660F005F6349 /* oalUtility.cpp */; };
+		55014E3C24EA660F005F6349 /* oalUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 55014E3924EA660F005F6349 /* oalUtility.h */; };
+		55014E3D24EA660F005F6349 /* oalUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 55014E3924EA660F005F6349 /* oalUtility.h */; };
 		8A0CB5BF097F5FC000B17352 /* CAAudioUnitOutputCapturer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A0CB5BD097F5FC000B17352 /* CAAudioUnitOutputCapturer.h */; };
 		8A10679108D8C3460060359C /* CAThreadSafeList.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A10678F08D8C3460060359C /* CAThreadSafeList.h */; };
 		8A3A1DA308EC575A008DD7C5 /* CABufferList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3A1DA108EC575A008DD7C5 /* CABufferList.cpp */; };
@@ -164,6 +168,8 @@
 		55014E3424E8EBF6005F6349 /* OpenAL.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = OpenAL.modulemap; path = Source/OpenAL/Modules/OpenAL.modulemap; sourceTree = "<group>"; };
 		55014E3524E8ECBC005F6349 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
 		55014E3724E8FD04005F6349 /* CAAtomic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAtomic.h; sourceTree = "<group>"; };
+		55014E3824EA660F005F6349 /* oalUtility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = oalUtility.cpp; sourceTree = "<group>"; };
+		55014E3924EA660F005F6349 /* oalUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oalUtility.h; sourceTree = "<group>"; };
 		8A0561E40546034200A003E7 /* oalOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oalOSX.h; sourceTree = "<group>"; };
 		8A0561E50546034200A003E7 /* oalOSX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oalOSX.cpp; sourceTree = "<group>"; };
 		8A0CB5BD097F5FC000B17352 /* CAAudioUnitOutputCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAAudioUnitOutputCapturer.h; sourceTree = "<group>"; };
@@ -296,6 +302,8 @@
 				55014E2424E8AC9E005F6349 /* oalRingBuffer.cpp */,
 				55014E2724E8ACC8005F6349 /* oalCaptureMixer.h */,
 				55014E2624E8ACC8005F6349 /* oalCaptureMixer.cpp */,
+				55014E3924EA660F005F6349 /* oalUtility.h */,
+				55014E3824EA660F005F6349 /* oalUtility.cpp */,
 				8A681A8C0736ACD900730BF4 /* OpenAL.exp */,
 			);
 			name = OpenAL;
@@ -356,6 +364,7 @@
 				8AC6BDD209B39D9400242AEF /* oalDevice.h in Headers */,
 				8AC6BDD309B39D9400242AEF /* oalImp.h in Headers */,
 				8AC6BDD409B39D9400242AEF /* oalOSX.h in Headers */,
+				55014E3D24EA660F005F6349 /* oalUtility.h in Headers */,
 				8AC6BDD509B39D9400242AEF /* oalSource.h in Headers */,
 				8AC6BDD709B39D9400242AEF /* CADebugMacros.h in Headers */,
 				8AC6BDD809B39D9400242AEF /* CAGuard.h in Headers */,
@@ -380,6 +389,7 @@
 				8ACAAC7406528BF200E2D337 /* oalBuffer.h in Headers */,
 				8ACAAC7506528BF200E2D337 /* oalDevice.h in Headers */,
 				8ACAAC7606528BF200E2D337 /* oalOSX.h in Headers */,
+				55014E3C24EA660F005F6349 /* oalUtility.h in Headers */,
 				F4A98A17065E622600F04966 /* CAStreamBasicDescription.h in Headers */,
 				F4A98A19065E622700F04966 /* CAMutex.h in Headers */,
 				F4A98A1B065E622700F04966 /* CAMath.h in Headers */,
@@ -450,6 +460,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 1130;
 			};
 			buildConfigurationList = 8ACD0BBC0885C20A00D0637F /* Build configuration list for PBXProject "OpenALOpenSource" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -519,6 +530,7 @@
 				8AC6BDEC09B39D9400242AEF /* oalSource.cpp in Sources */,
 				55014E3124E8ACE9005F6349 /* CAXException.cpp in Sources */,
 				8AC6BDED09B39D9400242AEF /* oalBuffer.cpp in Sources */,
+				55014E3B24EA660F005F6349 /* oalUtility.cpp in Sources */,
 				8AC6BDEE09B39D9400242AEF /* oalCaptureDevice.cpp in Sources */,
 				8AC6BDEF09B39D9400242AEF /* CABufferList.cpp in Sources */,
 			);
@@ -542,6 +554,7 @@
 				8A87DAC108B1099D00178F66 /* oalSource.cpp in Sources */,
 				55014E3024E8ACE9005F6349 /* CAXException.cpp in Sources */,
 				8AF8503908D2513B004B64E7 /* oalBuffer.cpp in Sources */,
+				55014E3A24EA660F005F6349 /* oalUtility.cpp in Sources */,
 				8A5E140708EB104300AFA934 /* oalCaptureDevice.cpp in Sources */,
 				8A3A1DA308EC575A008DD7C5 /* CABufferList.cpp in Sources */,
 			);
@@ -561,15 +574,11 @@
 		8AC6BDFB09B39D9400242AEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_SEARCH_PATHS = /Volumes/Ultraman/XMen/CoreAudio/build;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX__;
 				INSTALL_PATH = /Developer/Examples/CoreAudio/OpenAL;
 				LIBRARY_STYLE = DYNAMIC;
@@ -592,6 +601,7 @@
 		8AC6BDFC09B39D9400242AEF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -618,15 +628,16 @@
 		8ACD0BB10885C20A00D0637F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				EXPORTED_SYMBOLS_FILE = Source/OpenAL/OpenAL.exp;
 				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INFOPLIST_FILE = "Source/OpenAL/OpenAL-Info.plist";
-				INSTALL_PATH = /System/Library/Frameworks;
+				INSTALL_PATH = /Library/Frameworks;
 				MODULEMAP_FILE = Source/OpenAL/Modules/OpenAL.modulemap;
 				OTHER_CFLAGS = (
 					"$(value)",
@@ -647,17 +658,18 @@
 		8ACD0BB20885C20A00D0637F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				EXPORTED_SYMBOLS_FILE = Source/OpenAL/OpenAL.exp;
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				INFOPLIST_FILE = "Source/OpenAL/OpenAL-Info.plist";
-				INSTALL_PATH = /System/Library/Frameworks;
+				INSTALL_PATH = /Library/Frameworks;
 				MODULEMAP_FILE = Source/OpenAL/Modules/OpenAL.modulemap;
 				OTHER_CFLAGS = (
 					"-D__MACOSX__",
@@ -679,8 +691,8 @@
 		8ACD0BB50885C20A00D0637F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				OTHER_CFLAGS = "-D__MACOSX__";
 				OTHER_LDFLAGS = "";
@@ -699,10 +711,10 @@
 		8ACD0BB60885C20A00D0637F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				OTHER_CFLAGS = (
@@ -727,11 +739,36 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 			};
 			name = Release;
@@ -740,11 +777,37 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
 			};

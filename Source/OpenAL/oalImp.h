@@ -153,9 +153,9 @@ enum {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void	alSetError (ALenum errorCode);
-UInt32	Get3DMixerVersion ();
-ALCint  IsDistortionPresent();
-ALCint  IsRogerBeepPresent();
+UInt32	Get3DMixerVersion (void);
+ALCint  IsDistortionPresent(void);
+ALCint  IsRogerBeepPresent(void);
 
 #endif
 

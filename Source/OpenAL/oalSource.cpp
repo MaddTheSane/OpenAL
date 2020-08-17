@@ -32,6 +32,7 @@
 #include "oalSource.h"
 #include "oalBuffer.h"
 #include "oalImp.h"
+#include "oalUtility.h"
 
 #define		LOG_PLAYBACK				0
 #define		LOG_VERBOSE					0
@@ -447,7 +448,7 @@ OSStatus	OALSource::SetDistanceParams(bool	inChangeReferenceDistance, bool inCha
 
 	if (Get3DMixerVersion() < k3DMixerVersion_2_0)	
 	{
-		// the pre-2.0 3DMixer does not accept kAudioUnitProperty_3DMixerDistanceParams, it has do some extra work and use the DistanceAtten property instead
+		// the pre-2.0 3DMixer does not accept kAudioUnitProperty_SpatcialMixerDistanceParams, it has do some extra work and use the DistanceAtten property instead
 		mOwningContext->SetDistanceAttenuation(mCurrentPlayBus, mReferenceDistance, mMaxDistance, mRollOffFactor);
 	}
 	else
@@ -1561,7 +1562,7 @@ void	OALSource::SetupMixerBus()
 			}
 			else
 			{
-				// the pre-2.0 3DMixer does not accept kAudioUnitProperty_3DMixerDistanceParams, it has do some extra work and use the DistanceAtten property instead
+				// the pre-2.0 3DMixer does not accept kAudioUnitProperty_SpatialMixerDistanceParams, it has do some extra work and use the DistanceAtten property instead
 				mOwningContext->SetDistanceAttenuation(mCurrentPlayBus, mReferenceDistance, mMaxDistance, mRollOffFactor);
 			}
 			
@@ -2630,7 +2631,7 @@ void	OALSource::ChangeChannelSettings()
 		if (bufferInfo)
 		{		
 #if LOG_GRAPH_AND_MIXER_CHANGES
-	DebugMessageN1("OALSource::ChangeChannelSettings: k3DMixerParam_Azimuth/k3DMixerParam_Distance called - OALSource = %ld\n", mSelfToken);
+	DebugMessageN1("OALSource::ChangeChannelSettings: kSpatialMixerParam_Azimuth/kSpatialMixerParam_Distance called - OALSource = %ld\n", mSelfToken);
 #endif
 			// only calculate position if sound is mono - stereo sounds get no location changes
 			if ( bufferInfo->mBuffer->GetNumberChannels() == 1)
@@ -2646,14 +2647,14 @@ void	OALSource::ChangeChannelSettings()
                 }
 								
 				// set azimuth
-				AudioUnitSetParameter(mOwningContext->GetMixerUnit(), k3DMixerParam_Azimuth, kAudioUnitScope_Input, mCurrentPlayBus, rel_azimuth, 0);
+				AudioUnitSetParameter(mOwningContext->GetMixerUnit(), kSpatialMixerParam_Azimuth, kAudioUnitScope_Input, mCurrentPlayBus, rel_azimuth, 0);
 				// set elevation
-				AudioUnitSetParameter(mOwningContext->GetMixerUnit(), k3DMixerParam_Elevation, kAudioUnitScope_Input, mCurrentPlayBus, rel_elevation, 0);
+				AudioUnitSetParameter(mOwningContext->GetMixerUnit(), kSpatialMixerParam_Elevation, kAudioUnitScope_Input, mCurrentPlayBus, rel_elevation, 0);
 
 				mAttenuationGainScaler = 1.0;
 				if (!mOwningContext->DoSetDistance())
 				{
-					AudioUnitSetParameter(mOwningContext->GetMixerUnit(), k3DMixerParam_Distance, kAudioUnitScope_Input, mCurrentPlayBus, mReferenceDistance, 0);///////
+					AudioUnitSetParameter(mOwningContext->GetMixerUnit(), kSpatialMixerParam_Distance, kAudioUnitScope_Input, mCurrentPlayBus, mReferenceDistance, 0);///////
 
 					// If 1.3-2.1 Mixer AND it's Linear, Exponential DO calculate Gain scaler - DO NOT  set distance
 					switch (mOwningContext->GetDistanceModel())
@@ -2694,7 +2695,7 @@ void	OALSource::ChangeChannelSettings()
 						rel_distance *= (kDistanceScalar/mMaxDistance);
 				
 					// set distance
-					AudioUnitSetParameter(mOwningContext->GetMixerUnit(), k3DMixerParam_Distance, kAudioUnitScope_Input, mCurrentPlayBus, rel_distance, 0);
+					AudioUnitSetParameter(mOwningContext->GetMixerUnit(), kSpatialMixerParam_Distance, kAudioUnitScope_Input, mCurrentPlayBus, rel_distance, 0);
 				}
 				
 				// Source Cone Support Here
@@ -2744,7 +2745,7 @@ void	OALSource::UpdateBusGain ()
 //	DebugMessageN3("OALSource::UpdateBusGain: k3DMixerParam_Gain called - OALSource:busGain:db = %ld:%f:%f\n", mSelfToken, busGain, db );
 //#endif
 
-			OSStatus	result = AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), k3DMixerParam_Gain, kAudioUnitScope_Input, mCurrentPlayBus, db, 0);
+			OSStatus	result = AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), kSpatialMixerParam_Gain, kAudioUnitScope_Input, mCurrentPlayBus, db, 0);
 				THROW_RESULT
 		}
 	}
@@ -2758,7 +2759,7 @@ void	OALSource::UpdateMinBusGain ()
 #endif
 	if (mCurrentPlayBus != kSourceNeedsBus)
 	{
-		OSStatus	result = AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), k3DMixerParam_MinGain, kAudioUnitScope_Input, mCurrentPlayBus, mMinGain, 0);
+		OSStatus	result = AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), kSpatialMixerParam_MinGain, kAudioUnitScope_Input, mCurrentPlayBus, mMinGain, 0);
             THROW_RESULT
 	}    
 }
@@ -4372,7 +4373,12 @@ void	OALSource::SetRogerBeepPreset(CFURLRef fileURL)
 				// Read the XML file.
 				CFDataRef		resourceData = NULL;
 				
-				status = CFURLCreateDataAndPropertiesFromResource (kCFAllocatorDefault, fileURL, &resourceData,	NULL, NULL, &result);
+				resourceData = createDataFromURL(fileURL);
+				if (resourceData == NULL) {
+					status = false;
+				} else {
+					status = true;
+				}
 				CFRelease (fileURL);	// no longer needed
 				
 				if (status == false || result)				
@@ -4559,7 +4565,12 @@ void	OALSource::SetDistortionPreset(CFURLRef fileURL)
 				// Read the XML file.
 				CFDataRef		resourceData = NULL;
 				
-				status = CFURLCreateDataAndPropertiesFromResource (kCFAllocatorDefault, fileURL, &resourceData,	NULL, NULL, &result);
+				resourceData = createDataFromURL(fileURL);
+				if (resourceData != NULL) {
+					status = true;
+				} else {
+					status = false;
+				}
 				CFRelease (fileURL);	// no longer needed
 				
 				if (status == false || result)				

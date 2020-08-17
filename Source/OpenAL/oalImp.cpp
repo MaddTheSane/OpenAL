@@ -5093,7 +5093,7 @@ ALC_API ALenum  alcASASetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
 				if (CreateCFURLFromData(NULL, (const char *) data , &nuRef))
 					throw (OSStatus) AL_INVALID_OPERATION;
 				oalSource->SetDistortionPreset(nuRef);
-				CFRelease(nuRef);
+				if (nuRef) CFRelease(nuRef);
                 break;					
             default:
 				err = AL_INVALID_NAME;

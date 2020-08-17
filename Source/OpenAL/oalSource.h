@@ -610,7 +610,7 @@ class OALSource
 /*
 	OSStatus	MuteCurrentPlayBus () const
 	{
-		return AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), k3DMixerParam_Gain, kAudioUnitScope_Input, mCurrentPlayBus, 0.0, 0);
+		return AudioUnitSetParameter (	mOwningContext->GetMixerUnit(), kSpatialMixerParam_Gain, kAudioUnitScope_Input, mCurrentPlayBus, 0.0, 0);
 	}
 */
 
