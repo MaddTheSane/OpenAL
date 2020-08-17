@@ -70,6 +70,14 @@ full barrier.
 #include <atomic>
 #endif
 
+#if (MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_12 || __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_10_0) && !defined(USE_OS_LOCK)
+#define USE_OS_LOCK_H 1
+#endif
+
+#if defined(USE_OS_LOCK_H) && USE_OS_LOCK_H
+#include <os/lock.h>
+#endif
+
 inline void CAMemoryBarrier() 
 {
 #if (__has_include(<atomic>) && __has_extension(cxx_atomic))
@@ -223,7 +231,7 @@ inline bool CAAtomicTestAndSetBarrier(int bitToSet, void* theAddress)
 	uint8_t v = (0x80u >> (bitToSet & 7));
 	return (std::atomic_fetch_or_explicit((std::atomic<uint8_t>*)a, v,
 			std::memory_order_seq_cst) & v);
-	#elif TARGET_OS_WIN32
+#elif TARGET_OS_WIN32
 	BOOL bOldVal = InterlockedBitTestAndSet((long*)theAddress, bitToSet);
 	return (bOldVal ? true : false);
 #else
@@ -307,6 +315,26 @@ inline bool CAAtomicCompareAndSwapPtrBarrier(void *__oldValue, void *__newValue,
  * The try operation immediately returns false if the lock was held, true if it took the
  * lock.  The convention is that unlocked is zero, locked is nonzero.
  */
+#if defined(USE_OS_LOCK_H) && USE_OS_LOCK_H
+#define CA_SPINLOCK_INIT OS_UNFAIR_LOCK_INIT
+
+typedef os_unfair_lock CASpinLock;
+
+inline void    CASpinLockLock( CASpinLock *__lock )
+{
+	os_unfair_lock_lock(__lock);
+}
+
+inline void    CASpinLockUnlock( CASpinLock *__lock )
+{
+	os_unfair_lock_unlock(__lock);
+}
+
+inline bool    CASpinLockTry( CASpinLock *__lock )
+{
+	return ::os_unfair_lock_trylock(__lock);
+}
+#else
 #define	CA_SPINLOCK_INIT    0
 
 typedef int32_t CASpinLock;
@@ -343,5 +371,6 @@ inline bool    CASpinLockTry( volatile CASpinLock *__lock )
 #endif
 }
 
+#endif
 
 #endif // __CAAtomic_h__

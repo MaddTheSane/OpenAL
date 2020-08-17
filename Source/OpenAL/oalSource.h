@@ -173,7 +173,7 @@ public:
 private:
 	UInt32  GetPacketSize() ;
 	UInt32	FrameOffsetToPacketOffset(UInt32	inFrameOffset);
-    UInt32 Size () const { return size(); }
+    UInt32 Size () const { return UInt32(size()); }
     
     volatile int32_t    mBufferQueueSize;         // shadow variable to store the size of the queue
 };

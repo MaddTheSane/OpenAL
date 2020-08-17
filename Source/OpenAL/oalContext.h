@@ -317,7 +317,7 @@ public:
 			return (0);
 	}
     
-    UInt32 Size() const { return size(); }
+    UInt32 Size() const { return UInt32(size()); }
     bool Empty() const { return empty(); }
 };
 
