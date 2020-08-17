@@ -34,6 +34,7 @@
 		55014E3B24EA660F005F6349 /* oalUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55014E3824EA660F005F6349 /* oalUtility.cpp */; };
 		55014E3C24EA660F005F6349 /* oalUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 55014E3924EA660F005F6349 /* oalUtility.h */; };
 		55014E3D24EA660F005F6349 /* oalUtility.h in Headers */ = {isa = PBXBuildFile; fileRef = 55014E3924EA660F005F6349 /* oalUtility.h */; };
+		55014E4024EA6864005F6349 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 55014E3E24EA6864005F6349 /* InfoPlist.strings */; };
 		8A0CB5BF097F5FC000B17352 /* CAAudioUnitOutputCapturer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A0CB5BD097F5FC000B17352 /* CAAudioUnitOutputCapturer.h */; };
 		8A10679108D8C3460060359C /* CAThreadSafeList.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A10678F08D8C3460060359C /* CAThreadSafeList.h */; };
 		8A3A1DA308EC575A008DD7C5 /* CABufferList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8A3A1DA108EC575A008DD7C5 /* CABufferList.cpp */; };
@@ -170,6 +171,7 @@
 		55014E3724E8FD04005F6349 /* CAAtomic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAtomic.h; sourceTree = "<group>"; };
 		55014E3824EA660F005F6349 /* oalUtility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = oalUtility.cpp; sourceTree = "<group>"; };
 		55014E3924EA660F005F6349 /* oalUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oalUtility.h; sourceTree = "<group>"; };
+		55014E3F24EA6864005F6349 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8A0561E40546034200A003E7 /* oalOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oalOSX.h; sourceTree = "<group>"; };
 		8A0561E50546034200A003E7 /* oalOSX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = oalOSX.cpp; sourceTree = "<group>"; };
 		8A0CB5BD097F5FC000B17352 /* CAAudioUnitOutputCapturer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAAudioUnitOutputCapturer.h; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 				55014E2624E8ACC8005F6349 /* oalCaptureMixer.cpp */,
 				55014E3924EA660F005F6349 /* oalUtility.h */,
 				55014E3824EA660F005F6349 /* oalUtility.cpp */,
+				55014E3E24EA6864005F6349 /* InfoPlist.strings */,
 				8A681A8C0736ACD900730BF4 /* OpenAL.exp */,
 			);
 			name = OpenAL;
@@ -489,6 +492,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55014E4024EA6864005F6349 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +573,17 @@
 			targetProxy = 8ACAAC9A06528C7E00E2D337 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		55014E3E24EA6864005F6349 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				55014E3F24EA6864005F6349 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		8AC6BDFB09B39D9400242AEF /* Release */ = {
