@@ -529,8 +529,8 @@ class OALSource
 		// Audio Units and properties for RogerBeep and Distortion
 		AUNode						mRogerBeepNode;
 		AudioUnit					mRogerBeepAU;
-		Boolean						mASARogerBeepEnable;
-		Boolean						mASARogerBeepOn;
+		bool						mASARogerBeepEnable;
+		bool						mASARogerBeepOn;
 		Float32						mASARogerBeepGain;
 		SInt32						mASARogerBeepSensitivity;
 		SInt32						mASARogerBeepType;
@@ -538,8 +538,8 @@ class OALSource
 
 		AUNode						mDistortionNode;
 		AudioUnit					mDistortionAU;		
-		Boolean						mASADistortionEnable;
-		Boolean						mASADistortionOn;
+		bool						mASADistortionEnable;
+		bool						mASADistortionOn;
 		Float32						mASADistortionMix;
 		SInt32						mASADistortionType;
 		char*						mASADistortionPreset;
@@ -732,15 +732,15 @@ class OALSource
 	void			SetOcclusion(Float32 inOcclusion);
 	void			SetObstruction(Float32 inObstruction);
 	
-	void			SetRogerBeepEnable(Boolean inEnable);
-	void			SetRogerBeepOn(Boolean inOn);
+	void			SetRogerBeepEnable(bool inEnable);
+	void			SetRogerBeepOn(bool inOn);
 	void			SetRogerBeepGain(Float32 inGain);
 	void			SetRogerBeepSensitivity(SInt32 inSensitivity);
 	void			SetRogerBeepType(SInt32 inType);
 	void			SetRogerBeepPreset(CFURLRef inRef);
 	
-	void			SetDistortionEnable(Boolean inEnable);
-	void			SetDistortionOn(Boolean inOn);
+	void			SetDistortionEnable(bool inEnable);
+	void			SetDistortionOn(bool inOn);
 	void			SetDistortionMix(Float32 inMix);
 	void			SetDistortionType(SInt32 inType);
 	void			SetDistortionPreset(CFURLRef inRef);
@@ -749,14 +749,14 @@ class OALSource
 	Float32			GetOcclusion() {return mASAOcclusion;}
 	Float32			GetObstruction() {return mASAObstruction;}
 
-	Boolean			GetRogerBeepEnable() {return mASARogerBeepEnable;}
-	Boolean			GetRogerBeepOn() {return mASARogerBeepOn;}
+	bool			GetRogerBeepEnable() {return mASARogerBeepEnable;}
+	bool			GetRogerBeepOn() {return mASARogerBeepOn;}
 	Float32			GetRogerBeepGain() {return mASARogerBeepGain;}
 	UInt32			GetRogerBeepSensitivity() {return mASARogerBeepSensitivity;}
 	UInt32			GetRogerBeepType() {return mASARogerBeepType;}
 	
-	Boolean			GetDistortionEnable() {return mASADistortionEnable;}
-	Boolean			GetDistortionOn() {return mASADistortionOn;}
+	bool			GetDistortionEnable() {return mASADistortionEnable;}
+	bool			GetDistortionOn() {return mASADistortionOn;}
 	Float32			GetDistortionMix() {return mASADistortionMix;}
 	SInt32			GetDistortionType() {return mASADistortionType;}
 };	

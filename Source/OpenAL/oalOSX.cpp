@@ -822,7 +822,9 @@ static __inline__ int CountLeadingZeroes(int arg) {
 #else
 	#error "ERROR - assembly instructions for counting leading zeroes not present"
 #endif
+#if !__has_builtin(__builtin_clz)
          return arg;
+#endif
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

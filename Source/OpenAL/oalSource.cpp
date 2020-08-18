@@ -4209,7 +4209,7 @@ void	OALSource::SetObstruction(Float32 inObstruction)
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void	OALSource::SetRogerBeepEnable(Boolean inEnable)
+void	OALSource::SetRogerBeepEnable(bool inEnable)
 {
 #if LOG_VERBOSE
     DebugMessageN2("OALSource::SetRogerBeepEnable - OALSource:inEnable = %ld:%d\n", (long int) mSelfToken, inEnable);
@@ -4264,7 +4264,7 @@ void	OALSource::SetRogerBeepEnable(Boolean inEnable)
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void	OALSource::SetRogerBeepOn(Boolean inOn)
+void	OALSource::SetRogerBeepOn(bool inOn)
 {
 #if LOG_VERBOSE
     DebugMessageN2("OALSource::SetRogerBeepOn - OALSource:inOn = %ld:%d\n", (long int) mSelfToken, inOn);
@@ -4427,7 +4427,7 @@ void	OALSource::SetRogerBeepPreset(CFURLRef fileURL)
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void	OALSource::SetDistortionEnable(Boolean inEnable)
+void	OALSource::SetDistortionEnable(bool inEnable)
 {
 #if LOG_VERBOSE
     DebugMessageN2("OALSource::SetDistortionEnable - OALSource:inEnable = %ld:%d\n", (long int) mSelfToken, inEnable);
@@ -4479,7 +4479,7 @@ void	OALSource::SetDistortionEnable(Boolean inEnable)
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void	OALSource::SetDistortionOn(Boolean inOn)
+void	OALSource::SetDistortionOn(bool inOn)
 {
 #if LOG_VERBOSE
     DebugMessageN2("OALSource::SetDistortionOn - OALSource:inOn = %ld:%d\n", (long int) mSelfToken, inOn);
