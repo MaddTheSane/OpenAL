@@ -84,6 +84,7 @@ enum {
 #define	kSourceNeedsBus                     -1
 
 // do not change kDistanceScalar from 10.0 - it is used to compensate for a reverb related problem in the 3DMixer
+// TODO: does this affect Spatial Mixer, too?
 #define kDistanceScalar                     10.0
 
 #define	kTransitionToStop					0XDD01

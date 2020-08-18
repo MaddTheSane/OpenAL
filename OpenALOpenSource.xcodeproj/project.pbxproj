@@ -166,7 +166,7 @@
 		55014E2724E8ACC8005F6349 /* oalCaptureMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oalCaptureMixer.h; sourceTree = "<group>"; };
 		55014E2E24E8ACE9005F6349 /* CAXException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAXException.cpp; sourceTree = "<group>"; };
 		55014E2F24E8ACE9005F6349 /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
-		55014E3424E8EBF6005F6349 /* OpenAL.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = OpenAL.modulemap; path = Source/OpenAL/Modules/OpenAL.modulemap; sourceTree = "<group>"; };
+		55014E3424E8EBF6005F6349 /* OpenAL.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = "sourcecode.module-map"; name = OpenAL.modulemap; path = Source/OpenAL/Modules/OpenAL.modulemap; sourceTree = "<group>"; usesTabs = 0; };
 		55014E3524E8ECBC005F6349 /* OpenAL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAL.h; sourceTree = "<group>"; };
 		55014E3724E8FD04005F6349 /* CAAtomic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAtomic.h; sourceTree = "<group>"; };
 		55014E3824EA660F005F6349 /* oalUtility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = oalUtility.cpp; sourceTree = "<group>"; };
@@ -263,14 +263,14 @@
 				55014E3424E8EBF6005F6349 /* OpenAL.modulemap */,
 				08FB77ACFE841707C02AAC07 /* OpenAL */,
 				F40E4CDD065E5DB9004336C3 /* PublicUtility */,
-				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DDFF38A45A11DB9C8B /* Products */,
 			);
 			name = al_osx;
 			sourceTree = "<group>";
 			usesTabs = 1;
 		};
-		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				8A482668053C8B3F0040E37D /* AudioUnit.framework */,
@@ -279,7 +279,7 @@
 				8A482665053C8B290040E37D /* CoreFoundation.framework */,
 				8A8C7E59058A3C5800C746A3 /* CoreServices.framework */,
 			);
-			name = "External Frameworks and Libraries";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		08FB77ACFE841707C02AAC07 /* OpenAL */ = {
@@ -645,6 +645,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1.9;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -653,6 +654,7 @@
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Source/OpenAL/OpenAL-Info.plist";
 				INSTALL_PATH = /Library/Frameworks;
+				MARKETING_VERSION = 1.9;
 				MODULEMAP_FILE = Source/OpenAL/Modules/OpenAL.modulemap;
 				OTHER_CFLAGS = (
 					"$(value)",
@@ -675,6 +677,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.9;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -685,6 +688,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				INFOPLIST_FILE = "Source/OpenAL/OpenAL-Info.plist";
 				INSTALL_PATH = /Library/Frameworks;
+				MARKETING_VERSION = 1.9;
 				MODULEMAP_FILE = Source/OpenAL/Modules/OpenAL.modulemap;
 				OTHER_CFLAGS = (
 					"-D__MACOSX__",
