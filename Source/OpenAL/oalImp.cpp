@@ -5065,7 +5065,6 @@ ALC_API ALenum  alcASASetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
 				if (CreateCFURLFromData(NULL, (const char *) data , &nuRef))
 					throw (OSStatus) AL_INVALID_OPERATION;
 				oalSource->SetRogerBeepPreset(nuRef);
-				CFRelease(nuRef);
                 break;			
             case ALC_ASA_DISTORTION_ENABLE:
 				if((!IsDistortionPresent()) || (dataSize < sizeof(Boolean)))
@@ -5093,7 +5092,6 @@ ALC_API ALenum  alcASASetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
 				if (CreateCFURLFromData(NULL, (const char *) data , &nuRef))
 					throw (OSStatus) AL_INVALID_OPERATION;
 				oalSource->SetDistortionPreset(nuRef);
-				if (nuRef) CFRelease(nuRef);
                 break;					
             default:
 				err = AL_INVALID_NAME;
@@ -5255,7 +5253,6 @@ ALC_API ALenum  alcASASetListener(ALuint property, ALvoid *data, ALuint dataSize
 				CFRelease(nuString);
 						
 				oalContext->SetReverbPreset(nuRef);
-				CFRelease(nuRef);
 			}
 				break;
 

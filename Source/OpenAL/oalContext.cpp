@@ -1499,12 +1499,12 @@ void	OALContext::SetReverbPreset (CFURLRef fileURL)
 				CFDataRef		resourceData = NULL;
 				
 				resourceData = copyDataContentsOfFileAtURL(fileURL);
+				CFRelease (fileURL);	// no longer needed
 				if (resourceData != NULL) {
 					status = true;
 				} else {
 					status = false;
 				}
-				CFRelease (fileURL);	// no longer needed
 				
 				if (status == false || result)				
 					throw (OSStatus) -1;			

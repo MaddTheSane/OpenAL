@@ -4380,12 +4380,12 @@ void	OALSource::SetRogerBeepPreset(CFURLRef fileURL)
 				CFDataRef		resourceData = NULL;
 				
 				resourceData = copyDataContentsOfFileAtURL(fileURL);
+				CFRelease (fileURL);	// no longer needed
 				if (resourceData == NULL) {
 					status = false;
 				} else {
 					status = true;
 				}
-				CFRelease (fileURL);	// no longer needed
 				
 				if (status == false || result)				
 					throw (OSStatus) -1;			
@@ -4572,12 +4572,12 @@ void	OALSource::SetDistortionPreset(CFURLRef fileURL)
 				CFDataRef		resourceData = NULL;
 				
 				resourceData = copyDataContentsOfFileAtURL(fileURL);
+				CFRelease (fileURL);	// no longer needed
 				if (resourceData != NULL) {
 					status = true;
 				} else {
 					status = false;
 				}
-				CFRelease (fileURL);	// no longer needed
 				
 				if (status == false || result)				
 					throw (OSStatus) -1;			

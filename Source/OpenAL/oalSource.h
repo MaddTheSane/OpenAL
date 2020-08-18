@@ -742,13 +742,13 @@ class OALSource
 	void			SetRogerBeepGain(Float32 inGain);
 	void			SetRogerBeepSensitivity(SInt32 inSensitivity);
 	void			SetRogerBeepType(SInt32 inType);
-	void			SetRogerBeepPreset(CFURLRef inRef);
+	void			SetRogerBeepPreset(CFURLRef inRef CF_RELEASES_ARGUMENT);
 	
 	void			SetDistortionEnable(bool inEnable);
 	void			SetDistortionOn(bool inOn);
 	void			SetDistortionMix(Float32 inMix);
 	void			SetDistortionType(SInt32 inType);
-	void			SetDistortionPreset(CFURLRef inRef);
+	void			SetDistortionPreset(CFURLRef inRef CF_RELEASES_ARGUMENT);
 
 	Float32			GetReverbSendLevel() {return mASAReverbSendLevel;}
 	Float32			GetOcclusion() {return mASAOcclusion;}

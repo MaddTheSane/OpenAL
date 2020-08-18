@@ -125,7 +125,7 @@ class OALDevice
 	private:
 		uintptr_t				mSelfToken;
 		ALenum					mCurrentError;
-        AudioDeviceID			mHALDevice;                     // the HAL device used to render audio to the user		
+        AudioDeviceID			mHALDevice;                     //!< the HAL device used to render audio to the user		
         bool					mDistanceScalingRequired;
 		bool					mGraphInitialized;
 		AUGraph					mAUGraph;
@@ -136,9 +136,9 @@ class OALDevice
 		OALContext*				mConnectedContext;
 		Float64					mDeviceSampleRate;
         UInt32					mRenderChannelCount;
-        UInt32					mRenderChannelSetting;			// currently either stereo or multichannel
+        UInt32					mRenderChannelSetting;			//!< currently either stereo or multichannel
 		UInt32					mFramesPerSlice;
-		std::atomic<int32_t>	mInUseFlag;						// flag to indicate if the device is currently being edited by one or more threads
+		std::atomic<int32_t>	mInUseFlag;						//!< flag to indicate if the device is currently being edited by one or more threads
 #if AUHAL_LOG_OUTPUT
         AudioLogger			mLogger;
 #endif

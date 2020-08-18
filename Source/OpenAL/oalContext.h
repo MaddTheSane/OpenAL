@@ -156,7 +156,7 @@ class OALContext
 	void			SetListenerGain(Float32 inGain);
 	void			SetListenerOrientation( Float32  forwardX,   Float32  forwardY, Float32  forwardZ,
 											Float32  upX,        Float32  upY, 		Float32  upZ);
-	void			SetReverbPreset (CFURLRef inRef);
+	void			SetReverbPreset (CFURLRef inRef CF_RELEASES_ARGUMENT);
 
 	// ASA Support: Reverb, Occlusion
 	void			SetReverbState(UInt32 inReverbState);
