@@ -24,6 +24,11 @@
 #include "oalContext.h"
 #include "oalSource.h"
 #include "oalUtility.h"
+#include <cmath>
+using std::fabs;
+using std::isnan;
+using std::pow;
+using std::log10;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

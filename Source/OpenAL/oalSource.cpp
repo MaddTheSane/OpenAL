@@ -33,6 +33,12 @@
 #include "oalBuffer.h"
 #include "oalImp.h"
 #include "oalUtility.h"
+#include <cmath>
+using std::fabs;
+using std::acos;
+using std::isnan;
+using std::pow;
+using std::log10;
 
 #define		LOG_PLAYBACK				0
 #define		LOG_VERBOSE					0
