@@ -118,14 +118,19 @@ public:
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #pragma mark _____BufferQueue_____
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// This struct is used by OAL source to store info about the buffers in it's queue
+//! This struct is used by OAL source to store info about the buffers in it's queue
 struct	BufferInfo {
-							ALuint		mBufferToken;					// the buffer name that the user was returned when the buffer was created
-							OALBuffer	*mBuffer;						// buffer object
-							UInt32		mOffset;						// current read position offset of this data
-							UInt32		mProcessedState;				// mark as true when data of this buffer is finished playing and looping is off
-							ALuint		mACToken;						// use this AC from the ACMap for converting the data to the mixer format, when
-																		// set to zero, then NO AC is needed, the data has already been converted
+	//! the buffer name that the user was returned when the buffer was created
+	ALuint		mBufferToken;
+	//! buffer object
+	OALBuffer	*mBuffer;
+	//! current read position offset of this data
+	UInt32		mOffset;
+	//! mark as true when data of this buffer is finished playing and looping is off
+	UInt32		mProcessedState;
+	//! use this AC from the ACMap for converting the data to the mixer format, when
+	//! set to zero, then NO AC is needed, the data has already been converted
+	ALuint		mACToken;
 };
 
 class BufferQueue : std::vector<BufferInfo> {
@@ -155,7 +160,7 @@ public:
 			it->mProcessedState = kProcessed;
 	}
 	
-	// mark all the buffers in the queue as unprocessed and offset 0
+	//! mark all the buffers in the queue as unprocessed and offset 0
 	void 	ResetBuffers() {
         iterator	it = begin();
         while (it != end())
@@ -184,16 +189,16 @@ typedef	BufferQueue BufferQueue;
 #pragma mark _____ACMap_____
 // ACMap - map the AudioConverters for the sources queue
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// This struct is used by OAL source to store info about the ACs used by it's queue
+//! This struct is used by OAL source to store info about the ACs used by it's queue
 struct	ACInfo {
-					AudioConverterRef				mConverter;
-					CAStreamBasicDescription		mInputFormat; 
+	AudioConverterRef				mConverter;
+	CAStreamBasicDescription		mInputFormat;
 };
 
 class ACMap : std::multimap<ALuint, ACInfo, std::less<ALuint> > {
 public:
     
-    // add a new context to the map
+    //! add a new context to the map
     void Add (const	ALuint	inACToken, ACInfo *inACInfo)  {
 		iterator it = upper_bound(inACToken);
 		insert(it, value_type (inACToken, *inACInfo));
@@ -232,7 +237,7 @@ public:
 		}
     }
 
-    // the map should be disposed after making this call
+    //! the map should be disposed after making this call
     void RemoveAllConverters () {
         iterator 	it = begin();		
         iterator	theEnd = end();
@@ -452,7 +457,7 @@ class OALSource
 #pragma mark __________ PRIVATE __________
 	private:
 
-		ALuint						mSelfToken;					// the token returned to the caller upon alGenSources()
+		ALuint						mSelfToken;					//!< the token returned to the caller upon alGenSources()
 		bool						mSafeForDeletion;
 		OALContext                  *mOwningContext;
 		bool						mIsSuspended;
@@ -461,19 +466,19 @@ class OALSource
         bool						mResetBus;
 		bool						mResetPitch;
 
-		BufferQueue					*mBufferQueueActive;        // map of buffers for queueing
-		BufferQueue					*mBufferQueueInactive;      // map of buffers already queued
-        BufferQueue					*mBufferQueueTemp;          // map of buffers for temporary queueing
-        volatile int32_t            mQueueLength;               // snapshot of the queue length (mBufferQueueActive + mBufferQueueInactive)
-        volatile int32_t            mTempQueueLength;           // queue length returned when source is transitioning to flush Qs
-		UInt32						mBuffersQueuedForClear;		// number of buffers pending removal from the inactive queue
-		ALuint						mCurrentBufferIndex;		// index of the current buffer being played
-		bool						mQueueIsProcessed;			// state of the entire buffer queue
+		BufferQueue					*mBufferQueueActive;        //!< map of buffers for queueing
+		BufferQueue					*mBufferQueueInactive;      //!< map of buffers already queued
+        BufferQueue					*mBufferQueueTemp;          //!< map of buffers for temporary queueing
+        volatile int32_t            mQueueLength;               //!< snapshot of the queue length (mBufferQueueActive + mBufferQueueInactive)
+        volatile int32_t            mTempQueueLength;           //!< queue length returned when source is transitioning to flush Qs
+		UInt32						mBuffersQueuedForClear;		//!< number of buffers pending removal from the inactive queue
+		ALuint						mCurrentBufferIndex;		//!< index of the current buffer being played
+		bool						mQueueIsProcessed;			//!< state of the entire buffer queue
 		
-		std::atomic<int32_t>		mInUseFlag;					// flag to indicate a source is currently being used by one or more threads
+		std::atomic<int32_t>		mInUseFlag;					//!< flag to indicate a source is currently being used by one or more threads
 		CAGuard						mSourceLock;
 		AURenderCallbackStruct 		mPlayCallback;
-		int							mCurrentPlayBus;			// the mixer bus currently used by this source
+		int							mCurrentPlayBus;			//!< the mixer bus currently used by this source
 		
 		ACMap						*mACMap;
 
@@ -501,7 +506,7 @@ class OALSource
         UInt32                      mTempSourceStorageBufferSize;   
         AudioBufferList             *mTempSourceStorage;
 
-		UInt32						mState;						// playback state: Playing, Stopped, Paused, Initial, Transitioning (to stop)
+		UInt32						mState;						//!< playback state: Playing, Stopped, Paused, Initial, Transitioning (to stop)
 		float						mGain;
         Float32						mPitch;
         Float32						mDopplerScaler;
@@ -515,7 +520,7 @@ class OALSource
 		UInt32						mBufferCountToUnqueueInPostRender;
 		bool						mTransitioningToFlushQ;
 		
-		UInt32						mPlaybackHeadPosition;		// stored for a deferred repositioning of playbackHead as a frame index
+		UInt32						mPlaybackHeadPosition;		//!< stored for a deferred repositioning of playbackHead as a frame index
 		
 		Float32						mASAReverbSendLevel;
 		Float32						mASAOcclusion;
@@ -523,7 +528,7 @@ class OALSource
     
         UInt32                      mRenderQuality;
 
-		// thread protection
+		//! thread protection
 		OALRenderLocker				mRenderLocker;
 		
 		// Audio Units and properties for RogerBeep and Distortion
@@ -767,7 +772,7 @@ class OALSource
 class OALSourceMap : std::multimap<ALuint, OALSource*, std::less<ALuint> > {
 public:
     
-    // add a new context to the map
+    //! add a new context to the map
     void Add (const	ALuint	inSourceToken, OALSource **inSource)  {
 		iterator it = upper_bound(inSourceToken);
 		insert(it, value_type (inSourceToken, *inSource));
