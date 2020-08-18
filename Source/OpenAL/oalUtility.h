@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc);
+CFDataRef __nullable copyDataContentsOfFileAtURL(CFURLRef __nonnull theSrc) CF_RETURNS_RETAINED;
 
 #ifdef __cplusplus
 }

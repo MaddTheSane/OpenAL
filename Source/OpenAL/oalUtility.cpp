@@ -18,7 +18,7 @@ CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc)
 	if (!readRef) {
 		goto fail1;
 	}
-	if (!CFReadStreamOpen(readRef)){
+	if (!CFReadStreamOpen(readRef)) {
 		goto fail2;
 	}
 	streamStatus = CFReadStreamGetStatus(readRef);
@@ -34,7 +34,7 @@ CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc)
 		goto fail3;
 	}
 	do {
-		readDat = ::CFReadStreamRead(readRef, (UInt8*)datVal, 16 * 1024);
+		readDat = CFReadStreamRead(readRef, (UInt8*)datVal, 16 * 1024);
 		
 		if (readDat == 0) {
 			break;
@@ -44,7 +44,9 @@ CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc)
 		CFDataAppendBytes(toRet, datVal, readDat);
 	} while (true);
 	
-	
+	free(datVal);
+	CFReadStreamClose(readRef);
+	CFRelease(readRef);
 	return toRet;
 	
 	fail4:
