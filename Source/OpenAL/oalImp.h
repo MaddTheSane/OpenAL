@@ -128,7 +128,7 @@ AL_API ALvoid	AL_APIENTRY alHint( ALenum target, ALenum mode );
 #define kDefaultMaximumMixerBusCount    64
 #define kDopplerDefault                 0	
 
-enum {
+CF_ENUM(OSType) {
 		kRogerBeepType	= 'rogr',
 		kDistortionType	= 'dist'
 };

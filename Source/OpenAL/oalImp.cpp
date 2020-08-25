@@ -4993,7 +4993,7 @@ ALC_API ALenum  alcASAGetSource(ALuint property, ALuint sid, ALvoid *data, ALuin
 
 static bool CreateCFURLFromData(CFAllocatorRef allocator, const char *path, CFURLRef *outRef)
 {
-	CFStringRef strPath = CFStringCreateWithFileSystemRepresentation(allocator, path);
+	CFStringRef strPath = CFStringCreateWithFileSystemRepresentation(kCFAllocatorDefault, path);
 	if (!strPath) {
 		return false;
 	}
