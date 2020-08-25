@@ -11,15 +11,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreAudio/AudioHardwareBase.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 CFDataRef __nullable copyDataContentsOfFileAtURL(CFURLRef __nonnull theSrc) CF_RETURNS_RETAINED;
 OSStatus GetDefaultDevice(AudioObjectPropertySelector inOrOut, AudioObjectID * _Nonnull outID);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* oalUtility_hpp */
