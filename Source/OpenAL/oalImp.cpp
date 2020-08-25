@@ -31,6 +31,7 @@
 #include "oalBuffer.h"
 #include "oalCaptureDevice.h"
 #include "MacOSX_OALExtensions.h"
+#include "oalUtility.h"
 	
 // ~~~~~~~~~~~~~~~~~~~~~~
 // development build flags
@@ -251,12 +252,16 @@ ALdouble	GetMixerOutputRate()
 			// The default device has not yet been opened, go get the sample rate of the default hw
 			AudioDeviceID	device;
 			UInt32			propSize = sizeof(device);
-			OSStatus	result = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &propSize, &device);
+			OSStatus	result = GetDefaultDevice(kAudioHardwarePropertyDefaultOutputDevice, &device);
 			if (result == noErr)
 			{
+				AudioObjectPropertyAddress propAddr;
+				propAddr.mSelector = kAudioDevicePropertyNominalSampleRate;
+				propAddr.mElement = kAudioObjectPropertyElementMaster;
+				propAddr.mScope = kAudioObjectPropertyScopeOutput;
 				Float64		sr;
 				propSize = sizeof(sr);
-				result = AudioDeviceGetProperty(device, 0, false, kAudioDevicePropertyNominalSampleRate, &propSize, &sr);
+				result = AudioObjectGetPropertyData(device, &propAddr, 0, NULL, &propSize, &sr);
 				if (result == noErr)
 					returnValue = sr;
 			}

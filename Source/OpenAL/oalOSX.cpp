@@ -20,6 +20,7 @@
 **********************************************************************************************************************************/
 
 #include "oalOSX.h"
+#include "oalUtility.h"
 
 #define		LOG_RING_BUFFER		0
 
@@ -342,19 +343,23 @@ void	GetDefaultDeviceName(ALCchar*		outDeviceName, bool	isInput)
 	
 	try {
 		AudioDeviceID	defaultDevice = 0;
+		AudioObjectPropertyAddress propAddr;
 		// Get the default output device
 		size = sizeof(defaultDevice);
-		result = AudioHardwareGetProperty(deviceProperty, &size, &defaultDevice);
+		result = GetDefaultDevice(deviceProperty, &defaultDevice);
 			THROW_RESULT
 
-		result = AudioDeviceGetPropertyInfo( defaultDevice, 0, false, kAudioDevicePropertyDeviceName, &size, NULL);
+		propAddr.mSelector = kAudioDevicePropertyDeviceName;
+		propAddr.mElement = kAudioObjectPropertyElementMaster;
+		propAddr.mScope = isInput ? kAudioObjectPropertyScopeInput : kAudioObjectPropertyScopeOutput;
+		result = AudioObjectGetPropertyDataSize(defaultDevice, &propAddr, 0, NULL, &size);
 			THROW_RESULT
 
 		if (size > maxLen)
 			throw -1;
 		
 		size = maxLen;
-		result = AudioDeviceGetProperty(defaultDevice, 0, false, kAudioDevicePropertyDeviceName, &size, outDeviceName);
+		result = AudioObjectGetPropertyData(defaultDevice, &propAddr, 0, NULL, &size, outDeviceName);
 			THROW_RESULT
 			
 	} catch (...) {

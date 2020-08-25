@@ -22,6 +22,7 @@
 **********************************************************************************************************************************/
 
 #include "oalCaptureDevice.h"
+#include "oalUtility.h"
 
 #define LOG_CAPTURE         0
 
@@ -172,7 +173,7 @@ void	OALCaptureDevice::InitializeAU(const char* 	inDeviceName)
 		// get the default input device
 		propSize = sizeof(AudioDeviceID);
 		AudioDeviceID inputDevice;
-		result = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &propSize, &inputDevice);
+		result = GetDefaultDevice(kAudioHardwarePropertyDefaultInputDevice, &inputDevice);
 			THROW_RESULT
 
 		if (inputDevice == kAudioDeviceUnknown)

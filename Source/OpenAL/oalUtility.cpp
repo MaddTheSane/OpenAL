@@ -6,6 +6,7 @@
 //
 
 #include "oalUtility.h"
+#include <CoreAudio/CoreAudio.h>
 
 CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc)
 {
@@ -57,4 +58,19 @@ CFDataRef copyDataContentsOfFileAtURL(CFURLRef theSrc)
 	CFRelease(readRef);
 	fail1:
 	return nullptr;
+}
+
+OSStatus GetDefaultDevice(AudioObjectPropertySelector inOrOut, AudioObjectID *outID)
+{
+    UInt32 theSize = sizeof(*outID);
+    AudioObjectPropertyAddress theAddress = { inOrOut,
+                                              kAudioObjectPropertyScopeGlobal,
+                                              kAudioObjectPropertyElementMaster };
+
+    return AudioObjectGetPropertyData(kAudioObjectSystemObject,
+									  &theAddress,
+									  0,
+									  NULL,
+									  &theSize,
+									  outID);
 }

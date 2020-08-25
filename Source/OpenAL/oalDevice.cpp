@@ -23,6 +23,7 @@
 
 #include "oalDevice.h"
 #include "oalContext.h"
+#include "oalUtility.h"
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -115,6 +116,9 @@ OALDevice::OALDevice (const char* 	 inDeviceName, uintptr_t   inSelfToken, UInt3
 			if (cfString)
 			{
 				AudioValueTranslation	translation;
+				AudioObjectPropertyAddress theAddress = { kAudioHardwarePropertyDeviceForUID,
+														  kAudioObjectPropertyScopeGlobal,
+														  kAudioObjectPropertyElementMaster };
 				
 				translation.mInputData = &cfString;
 				translation.mInputDataSize = sizeof(cfString);
@@ -122,7 +126,12 @@ OALDevice::OALDevice (const char* 	 inDeviceName, uintptr_t   inSelfToken, UInt3
 				translation.mOutputDataSize = sizeof(mHALDevice);
 				
 				size = sizeof(AudioValueTranslation);
-				result = AudioHardwareGetProperty(kAudioHardwarePropertyDeviceForUID, &size, &translation);
+				result = AudioObjectGetPropertyData(kAudioObjectSystemObject,
+												  &theAddress,
+												  size,
+												  &translation,
+												  &size,
+												  &translation);
                 CFRelease (cfString);
 			}
 			else
@@ -133,7 +142,7 @@ OALDevice::OALDevice (const char* 	 inDeviceName, uintptr_t   inSelfToken, UInt3
 		else
 		{
 			size = sizeof(AudioDeviceID);
-			result = AudioHardwareGetProperty(kAudioHardwarePropertyDefaultOutputDevice, &size, &mHALDevice);
+			result = GetDefaultDevice(kAudioHardwarePropertyDefaultOutputDevice, &mHALDevice);
 				THROW_RESULT
 		}
 		
